@@ -222,29 +222,29 @@ const PlayerRow = memo(({
 
     if (difference <= -15)
       return {
-        bgColor: "bg-red-500/20 border border-red-400/30",
-        textColor: "text-red-100",
+        bgColor: "bg-red-200/90 dark:bg-red-500/20 border-2 border-red-300 dark:border-red-400/30",
+        textColor: "text-red-800 dark:text-red-100 font-medium",
         trend: "reach-high",
         delta: difference,
       }
     if (difference <= -8)
       return {
-        bgColor: "bg-red-500/10 border border-red-400/20",
-        textColor: "text-red-200",
+        bgColor: "bg-red-100/90 dark:bg-red-500/10 border border-red-200 dark:border-red-400/20",
+        textColor: "text-red-700 dark:text-red-200 font-medium",
         trend: "reach",
         delta: difference,
       }
     if (difference >= 15)
       return {
-        bgColor: "bg-emerald-500/20 border border-emerald-400/30",
-        textColor: "text-emerald-100",
+        bgColor: "bg-emerald-200/90 dark:bg-emerald-500/20 border-2 border-emerald-300 dark:border-emerald-400/30",
+        textColor: "text-emerald-800 dark:text-emerald-100 font-medium",
         trend: "value-high",
         delta: difference,
       }
     if (difference >= 8)
       return {
-        bgColor: "bg-emerald-500/10 border border-emerald-400/20",
-        textColor: "text-emerald-200",
+        bgColor: "bg-emerald-100/90 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-400/20",
+        textColor: "text-emerald-700 dark:text-emerald-200 font-medium",
         trend: "value",
         delta: difference,
       }
