@@ -2,37 +2,51 @@
 
 import { useState, useEffect } from "react";
 import type { JSX } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import ButtonSignin from "./ButtonSignin";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { BarChart3, TrendingUp } from 'lucide-react';
+import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import logo from "@/app/icon.png";
 import config from "@/config";
 
-const links: {
+const adpLinks: {
   href: string;
   label: string;
+  shortLabel?: string;
+  description: string;
+  icon: any;
 }[] = [
   {
-    href: "/#pricing",
-    label: "Pricing",
+    href: "/adp",
+    label: "ADP Smashboard",
+    shortLabel: "ADP",
+    description: "Compare rankings across platforms",
+    icon: BarChart3,
   },
   {
-    href: "/#testimonials",
-    label: "Reviews",
-  },
-  {
-    href: "/#faq",
-    label: "FAQ",
+    href: "/adp/values",
+    label: "Values & Busts",
+    shortLabel: "Values",
+    description: "Find hidden gems and avoid traps",
+    icon: TrendingUp,
   },
 ];
 
-const cta: JSX.Element = <ButtonSignin extraStyle="btn-primary" />;
+const themeToggle: JSX.Element = <ThemeToggle />;
 
-// A header with a logo on the left, links in the center (like Pricing, etc...), and a CTA (like Get Started or Login) on the right.
-// The header is responsive, and on mobile, the links are hidden behind a burger button.
+// A combined header with logo, ADP navigation, and theme toggle
 const Header = () => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // setIsOpen(false) when the route changes (i.e: when the user clicks on a link on mobile)
@@ -41,141 +55,69 @@ const Header = () => {
   }, [searchParams]);
 
   return (
-    <header className="bg-base-200">
+    <header className="bg-background border-b border-border sticky top-0 z-50 backdrop-blur-sm">
       <nav
-        className="container flex items-center justify-between px-8 py-4 mx-auto"
+        className="container flex items-center justify-between px-3 sm:px-4 lg:px-8 py-2 lg:py-3 mx-auto"
         aria-label="Global"
       >
-        {/* Your logo/name on large screens */}
-        <div className="flex lg:flex-1">
+        {/* Logo/name */}
+        <div className="flex flex-1">
           <Link
-            className="flex items-center gap-2 shrink-0 "
+            className="flex items-center gap-1.5 sm:gap-2 shrink-0"
             href="/"
             title={`${config.appName} homepage`}
           >
-            <Image
-              src={logo}
-              alt={`${config.appName} logo`}
-              className="w-8"
-              placeholder="blur"
-              priority={true}
-              width={32}
-              height={32}
-            />
-            <span className="font-extrabold text-lg">{config.appName}</span>
+            
+            <span className="font-extrabold text-sm sm:text-base">{config.appName}</span>
           </Link>
         </div>
-        {/* Burger button to open menu on mobile */}
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
-            onClick={() => setIsOpen(true)}
-          >
-            <span className="sr-only">Open main menu</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6 text-base-content"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-          </button>
-        </div>
 
-        {/* Your links on large screens */}
-        <div className="hidden lg:flex lg:justify-center lg:gap-12 lg:items-center">
-          {links.map((link) => (
-            <Link
-              href={link.href}
-              key={link.href}
-              className="link link-hover"
-              title={link.label}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* CTA on large screens */}
-        <div className="hidden lg:flex lg:justify-end lg:flex-1">{cta}</div>
-      </nav>
-
-      {/* Mobile menu, show/hide based on menu state. */}
-      <div className={`relative z-50 ${isOpen ? "" : "hidden"}`}>
-        <div
-          className={`fixed inset-y-0 right-0 z-10 w-full px-8 py-4 overflow-y-auto bg-base-200 sm:max-w-sm sm:ring-1 sm:ring-neutral/10 transform origin-right transition ease-in-out duration-300`}
-        >
-          {/* Your logo/name on small screens */}
-          <div className="flex items-center justify-between">
-            <Link
-              className="flex items-center gap-2 shrink-0 "
-              title={`${config.appName} homepage`}
-              href="/"
-            >
-              <Image
-                src={logo}
-                alt={`${config.appName} logo`}
-                className="w-8"
-                placeholder="blur"
-                priority={true}
-                width={32}
-                height={32}
-              />
-              <span className="font-extrabold text-lg">{config.appName}</span>
-            </Link>
-            <button
-              type="button"
-              className="-m-2.5 rounded-md p-2.5"
-              onClick={() => setIsOpen(false)}
-            >
-              <span className="sr-only">Close menu</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-
-          {/* Your links on small screens */}
-          <div className="flow-root mt-6">
-            <div className="py-4">
-              <div className="flex flex-col gap-y-4 items-start">
-                {links.map((link) => (
-                  <Link
-                    href={link.href}
-                    key={link.href}
-                    className="link link-hover"
-                    title={link.label}
+        {/* ADP Navigation - Always visible, adapts to screen size */}
+        <div className="flex justify-center gap-1.5 sm:gap-2 items-center mx-1 sm:mx-2">
+          <TooltipProvider>
+            {adpLinks.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+              
+              return (
+                <Tooltip key={item.href} delayDuration={300}>
+                  <TooltipTrigger asChild>
+                    <Link href={item.href}>
+                      <Button
+                        variant={isActive ? 'default' : 'ghost'}
+                        className={cn(
+                          "h-8 sm:h-9 px-2 sm:px-3 flex items-center gap-1.5 transition-all duration-200",
+                          isActive
+                            ? "bg-primary text-primary-foreground shadow-md"
+                            : "hover:bg-muted/60"
+                        )}
+                      >
+                        <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+                        <span className="font-medium text-xs sm:text-sm hidden xs:block">
+                          {item.shortLabel || item.label}
+                        </span>
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent 
+                    side="bottom" 
+                    className="hidden sm:block max-w-[200px]"
+                    sideOffset={4}
                   >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div className="divider"></div>
-            {/* Your CTA on small screens */}
-            <div className="flex flex-col">{cta}</div>
-          </div>
+                    <div className="text-sm font-medium mb-0.5">{item.label}</div>
+                    <div className="text-xs text-foreground/80 dark:text-white/70">{item.description}</div>
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
+          </TooltipProvider>
         </div>
-      </div>
+
+        {/* Theme toggle - Always visible */}
+        <div className="flex justify-end flex-1">
+          <ThemeToggle />
+        </div>
+      </nav>
     </header>
   );
 };

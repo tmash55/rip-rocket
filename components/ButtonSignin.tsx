@@ -6,6 +6,7 @@ import Link from "next/link";
 import { User } from "@supabase/supabase-js";
 import { createClient } from "@/libs/supabase/client";
 import config from "@/config";
+import { Button } from "@/components/ui/button";
 
 // A simple button to sign in with our providers (Google & Magic Links).
 // It automatically redirects user to callbackUrl (config.auth.callbackUrl) after login, which is normally a private page for users to manage their accounts.
@@ -34,36 +35,34 @@ const ButtonSignin = ({
 
   if (user) {
     return (
-      <Link
-        href={config.auth.callbackUrl}
-        className={`btn ${extraStyle ? extraStyle : ""}`}
-      >
-        {user?.user_metadata?.avatar_url ? (
-          <img
-            src={user?.user_metadata?.avatar_url}
-            alt={user?.user_metadata?.name || "Account"}
-            className="w-6 h-6 rounded-full shrink-0"
-            referrerPolicy="no-referrer"
-            width={24}
-            height={24}
-          />
-        ) : (
-          <span className="w-6 h-6 bg-base-300 flex justify-center items-center rounded-full shrink-0">
-            {user?.user_metadata?.name?.charAt(0) || user?.email?.charAt(0)}
-          </span>
-        )}
-        {user?.user_metadata?.name || user?.email || "Account"}
-      </Link>
+      <Button asChild variant={extraStyle?.includes("primary") ? "default" : "secondary"}>
+        <Link href={config.auth.callbackUrl}>
+          {user?.user_metadata?.avatar_url ? (
+            <img
+              src={user?.user_metadata?.avatar_url}
+              alt={user?.user_metadata?.name || "Account"}
+              className="w-6 h-6 rounded-full shrink-0 mr-2"
+              referrerPolicy="no-referrer"
+              width={24}
+              height={24}
+            />
+          ) : (
+            <span className="w-6 h-6 bg-muted flex justify-center items-center rounded-full shrink-0 mr-2">
+              {user?.user_metadata?.name?.charAt(0) || user?.email?.charAt(0)}
+            </span>
+          )}
+          {user?.user_metadata?.name || user?.email || "Account"}
+        </Link>
+      </Button>
     );
   }
 
   return (
-    <Link
-      className={`btn ${extraStyle ? extraStyle : ""}`}
-      href={config.auth.loginUrl}
-    >
-      {text}
-    </Link>
+    <Button asChild variant={extraStyle?.includes("primary") ? "default" : "secondary"}>
+      <Link href={config.auth.loginUrl}>
+        {text}
+      </Link>
+    </Button>
   );
 };
 

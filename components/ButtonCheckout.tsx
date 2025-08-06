@@ -3,6 +3,7 @@
 import { useState } from "react";
 import apiClient from "@/libs/api";
 import config from "@/config";
+import { Button } from "@/components/ui/button";
 
 // This component is used to create Stripe Checkout Sessions
 // It calls the /api/stripe/create-checkout route with the priceId, successUrl and cancelUrl
@@ -40,15 +41,16 @@ const ButtonCheckout = ({
   };
 
   return (
-    <button
-      className="btn btn-primary btn-block group"
+    <Button
+      className="w-full group"
       onClick={() => handlePayment()}
+      disabled={isLoading}
     >
       {isLoading ? (
-        <span className="loading loading-spinner loading-xs"></span>
+        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
       ) : (
         <svg
-          className="w-5 h-5 fill-primary-content group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-200"
+          className="w-5 h-5 fill-current group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-200 mr-2"
           viewBox="0 0 375 509"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +59,7 @@ const ButtonCheckout = ({
         </svg>
       )}
       Get {config?.appName}
-    </button>
+    </Button>
   );
 };
 

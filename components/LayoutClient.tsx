@@ -1,13 +1,14 @@
 "use client";
 
-import { User } from "@supabase/supabase-js";
-import { createClient } from "@/libs/supabase/client";
 import { useEffect, useState, ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { User } from "@supabase/supabase-js";
+import { createClient } from "@/libs/supabase/client";
 import { Crisp } from "crisp-sdk-web";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
+import Header from "@/components/Header";
 import config from "@/config";
 
 // Crisp customer chat support:
@@ -62,15 +63,19 @@ const CrispChat = (): null => {
 };
 
 // All the client wrappers are here (they can't be in server components)
-// 1. NextTopLoader: Show a progress bar at the top when navigating between pages
-// 2. Toaster: Show Success/Error messages anywhere from the app with toast()
-// 3. Tooltip: Show tooltips if any JSX elements has these 2 attributes: data-tooltip-id="tooltip" data-tooltip-content=""
-// 4. CrispChat: Set Crisp customer chat support (see above)
+// 1. Header: Public navigation header with orange theme
+// 2. NextTopLoader: Show a progress bar at the top when navigating between pages
+// 3. Toaster: Show Success/Error messages anywhere from the app with toast()
+// 4. Tooltip: Show tooltips if any JSX elements has these 2 attributes: data-tooltip-id="tooltip" data-tooltip-content=""
+// 5. CrispChat: Set Crisp customer chat support for public visitors
 const ClientLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       {/* Show a progress bar at the top when navigating between pages */}
       <NextTopLoader color={config.colors.main} showSpinner={false} />
+
+      {/* Public header navigation */}
+      <Header />
 
       {/* Content inside app/page.js files  */}
       {children}

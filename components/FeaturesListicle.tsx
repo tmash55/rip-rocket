@@ -329,7 +329,7 @@ const features: {
         <ul className="space-y-2">
           {[
             "Components, animations & sections (like the pricing page below)",
-            "20+ themes with daisyUI",
+                            "Custom dark theme with Tailwind",
             "Automatic dark mode",
           ].map((item) => (
             <li key={item} className="flex items-center gap-3">
