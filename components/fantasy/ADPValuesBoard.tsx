@@ -465,7 +465,7 @@ function PlayerVarianceGrid({ players, title, onPlayerClick, type = 'all', selec
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p className="max-w-xs">Higher numbers mean the player is drafted later (worse ADP). When a platform has a higher number than NFC, it's a value opportunity.</p>
+                <p className="max-w-xs">Higher numbers mean the player is drafted later (worse ADP). When a platform has a higher number than NFC, it&apos;s a value opportunity.</p>
               </TooltipContent>
             </Tooltip>
           </div>

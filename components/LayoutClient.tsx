@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, ReactNode } from "react";
+import { useEffect, useState, ReactNode, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { createClient } from "@/libs/supabase/client";
@@ -75,7 +75,20 @@ const ClientLayout = ({ children }: { children: ReactNode }) => {
       <NextTopLoader color={config.colors.main} showSpinner={false} />
 
       {/* Public header navigation */}
-      <Header />
+      <Suspense fallback={
+        <div className="bg-background border-b border-border sticky top-0 z-50 backdrop-blur-sm">
+          <div className="container flex items-center justify-between px-3 sm:px-4 lg:px-8 py-2 lg:py-3 mx-auto h-[41px] sm:h-[45px]">
+            <div className="animate-pulse bg-muted rounded-lg h-6 w-32"></div>
+            <div className="flex gap-2">
+              <div className="animate-pulse bg-muted rounded-lg h-8 w-20"></div>
+              <div className="animate-pulse bg-muted rounded-lg h-8 w-20"></div>
+            </div>
+            <div className="animate-pulse bg-muted rounded-lg h-8 w-8"></div>
+          </div>
+        </div>
+      }>
+        <Header />
+      </Suspense>
 
       {/* Content inside app/page.js files  */}
       {children}

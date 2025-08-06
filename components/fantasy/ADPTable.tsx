@@ -352,7 +352,10 @@ const PlayerRow = memo(({
   }
 
   return (
-    <div className="border-b border-border hover:bg-muted/30 relative">
+    <div 
+      className="border-b border-border hover:bg-muted/50 relative cursor-pointer transition-all duration-200 hover:shadow-sm group"
+      onClick={() => onPlayerClick(player.player_id)}
+    >
       <div className={`flex items-center ${isMobile ? 'px-2 py-1.5 gap-1.5' : 'px-4 py-2 gap-3'}`}>
         {/* Player Info - Fixed width and sticky on mobile */}
         <div className={`flex items-center ${isMobile ? 'gap-1 w-32 sticky left-0 bg-card z-10 border-r border-border pr-2 py-1.5' : 'gap-2.5 w-72'} flex-shrink-0`}>
@@ -365,12 +368,9 @@ const PlayerRow = memo(({
             showAvatar={!isMobile}
           />
           <div className="min-w-0 flex-1">
-            <button 
-              onClick={() => onPlayerClick(player.player_id)}
-              className={`font-semibold text-foreground truncate hover:text-primary transition-colors cursor-pointer text-left ${isMobile ? 'text-xs' : 'text-sm'}`}
-            >
+            <div className={`font-semibold text-foreground truncate group-hover:text-primary transition-colors ${isMobile ? 'text-xs' : 'text-sm'}`}>
               {player.name}
-            </button>
+            </div>
             <div className={`flex items-center gap-1 ${isMobile ? 'text-[10px]' : 'text-xs'} text-muted-foreground`}>
               <span className="font-medium">{player.team}</span>
               <span>•</span>

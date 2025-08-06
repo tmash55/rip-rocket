@@ -1,6 +1,71 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/libs/supabase/client';
 
+interface NFLTeam {
+  team_color: string;
+  team_color2: string;
+  team_name: string;
+}
+
+interface PlayerData {
+  player_id: string;
+  full_name: string;
+  position: string;
+  team_abbreviation: string;
+  headshot_url: string;
+  nfl_teams: NFLTeam;
+}
+
+interface Platform {
+  id: number;
+  name: string;
+  slug: string;
+  logo_url: string;
+}
+
+interface ADPRecord {
+  platform_adp: number;
+  overall_rank: number;
+  position_rank: number;
+  created_at: string;
+  fantasy_platforms: Platform;
+}
+
+interface TransformedADPRecord {
+  platform_adp: number;
+  overall_rank: number;
+  position_rank: number;
+  created_at: string;
+  platform: Platform;
+}
+
+interface PlatformData {
+  platform: Platform;
+  data: {
+    platform_adp: number;
+    overall_rank: number;
+    position_rank: number;
+    created_at: string;
+  }[];
+}
+
+interface APIResponse {
+  player: {
+    player_id: string;
+    full_name: string;
+    position: string;
+    team_abbreviation: string;
+    headshot_url: string;
+    team_color: string;
+    team_color2: string;
+    team_name: string;
+  };
+  historical_data: TransformedADPRecord[];
+  grouped_by_platform: { [key: string]: PlatformData };
+  data_points: number;
+  platforms: string[];
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { player_id: string } }
@@ -25,14 +90,14 @@ export async function GET(
         position, 
         team_abbreviation, 
         headshot_url,
-        nfl_teams!inner(
+        nfl_teams!inner (
           team_color,
           team_color2,
           team_name
         )
       `)
       .eq('player_id', player_id)
-      .single();
+      .single() as unknown as { data: PlayerData | null, error: any };
 
     if (playerError) {
       console.error('Error fetching player:', playerError);
@@ -59,7 +124,7 @@ export async function GET(
         )
       `)
       .eq('player_id', player_id)
-      .order('created_at', { ascending: true });
+      .order('created_at', { ascending: true }) as unknown as { data: ADPRecord[], error: any };
 
     if (adpError) {
       console.error('Error fetching ADP data:', adpError);
@@ -70,7 +135,7 @@ export async function GET(
     }
 
     // Transform data for easier frontend consumption
-    const transformedData = adpData.map((record: any) => ({
+    const transformedData = adpData.map((record: ADPRecord) => ({
       platform_adp: record.platform_adp,
       overall_rank: record.overall_rank,
       position_rank: record.position_rank,
@@ -84,7 +149,7 @@ export async function GET(
     }));
 
     // Group data by platform for easier chart rendering
-    const groupedByPlatform = transformedData.reduce((acc: any, record: any) => {
+    const groupedByPlatform = transformedData.reduce<{ [key: string]: PlatformData }>((acc, record) => {
       const platformName = record.platform.name;
       if (!acc[platformName]) {
         acc[platformName] = {
@@ -101,6 +166,16 @@ export async function GET(
       return acc;
     }, {});
 
+    // Ensure we have the NFL team data
+    const nflTeam = playerData.nfl_teams;
+    if (!nflTeam) {
+      console.error('NFL team data not found for player:', playerData.player_id);
+      return NextResponse.json(
+        { error: 'NFL team data not found' },
+        { status: 404 }
+      );
+    }
+
     const response = {
       player: {
         player_id: playerData.player_id,
@@ -108,9 +183,9 @@ export async function GET(
         position: playerData.position,
         team_abbreviation: playerData.team_abbreviation,
         headshot_url: playerData.headshot_url,
-        team_color: playerData.nfl_teams.team_color,
-        team_color2: playerData.nfl_teams.team_color2,
-        team_name: playerData.nfl_teams.team_name,
+        team_color: nflTeam.team_color,
+        team_color2: nflTeam.team_color2,
+        team_name: nflTeam.team_name,
       },
       historical_data: transformedData,
       grouped_by_platform: groupedByPlatform,

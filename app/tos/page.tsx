@@ -57,39 +57,49 @@ const TOS = () => {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: "sans-serif" }}
         >
-          {`Last Updated: September 26, 2023
+          {`Terms of Service
+Effective Date: August 6, 2025
 
-Welcome to ShipFast!
+1. Acceptance of Terms
+By accessing or using Fantasy Nexus (“the Site”), you agree to be bound by these Terms of Service (“Terms”). If you do not agree, please do not use the Site.
 
-These Terms of Service ("Terms") govern your use of the ShipFast website at https://shipfa.st ("Website") and the services provided by ShipFast. By using our Website and services, you agree to these Terms.
+2. Description of Service
+Fantasy Nexus is a free fantasy football tool that helps players gain an edge at their draft by identifying values and busts on each fantasy platform.
 
-1. Description of ShipFast
+3. Ownership and Use
+The Site and its content are owned by Fantasy Nexus. You may use the Site for personal, non-commercial purposes. Unauthorized copying, distribution, or modification of Site content is prohibited.
 
-ShipFast is a platform that offers a JavaScript code boilerplate to assist entrepreneurs in launching their startups more efficiently.
+4. User Conduct
+You agree not to:
 
-2. Ownership and Usage Rights
+Use the Site for any unlawful purpose.
 
-When you purchase a package from ShipFast, you gain the right to download and use the code provided for creating applications. You own the code you create but do not have the right to resell it. We offer a full refund within 7 days of purchase, as specified in our refund policy.
+Interfere with or disrupt the Site’s operation.
 
-3. User Data and Privacy
+Attempt to gain unauthorized access to Site data or systems.
 
-We collect and store user data, including name, email, and payment information, as necessary to provide our services. For details on how we handle your data, please refer to our Privacy Policy at https://shipfa.st/privacy-policy.
+5. Privacy and Data Collection
+We collect non-personal data through web cookies to improve Site performance. For details, see our Privacy Policy: https://fantasynexus.io/privacy-policy.
 
-4. Non-Personal Data Collection
+6. Intellectual Property
+All trademarks, logos, and service marks displayed on the Site are the property of Fantasy Nexus or their respective owners. Nothing contained in these Terms grants any license to use any logo or mark without the express written permission of Fantasy Nexus.
 
-We use web cookies to collect non-personal data for the purpose of improving our services and user experience.
+7. Disclaimer of Warranties
+The Site is provided “as is” and “as available” without warranties of any kind, express or implied. Fantasy Nexus does not guarantee the accuracy, completeness, or reliability of any content.
 
-5. Governing Law
+8. Limitation of Liability
+In no event shall Fantasy Nexus be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of the Site.
 
-These Terms are governed by the laws of France.
+9. Changes to Terms
+Fantasy Nexus may update these Terms from time to time. You will be notified of material changes via the email address you provided.
 
-6. Updates to the Terms
+10. Governing Law
+These Terms are governed by the laws of the United States of America, without regard to conflict of law principles.
 
-We may update these Terms from time to time. Users will be notified of any changes via email.
+11. Contact Information
+For questions or concerns, please contact us at tyler.maschoff@gmail.com.
 
-For any questions or concerns regarding these Terms of Service, please contact us at marc@shipfa.st.
-
-Thank you for using ShipFast!`}
+By using Fantasy Nexus, you acknowledge that you have read and agree to these Terms of Service.`}
         </pre>
       </div>
     </main>

@@ -69,11 +69,7 @@ export default function PlatformDraftAssistant() {
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnMount: true, // Ensure fresh data on mount
     retry: 2, // Retry failed requests
-    initialData: () => {
-      // Try to get data from the cache
-      const queryClient = useQueryClient();
-      return queryClient.getQueryData(['adp-data', 12]);
-    }
+    initialData: queryClient.getQueryData(['adp-data', 12])
   });
 
   // Process data for platform-specific analysis
@@ -216,7 +212,7 @@ export default function PlatformDraftAssistant() {
           <div className="space-y-6">
             <div className="text-center space-y-2">
               <h2 className="text-2xl font-bold text-foreground">Choose Your Platform</h2>
-              <p className="text-muted-foreground">Select the platform you're drafting on to see personalized recommendations</p>
+              <p className="text-muted-foreground">Select the platform you&apos;re drafting on to see personalized recommendations</p>
             </div>
             
             <div className={`${
