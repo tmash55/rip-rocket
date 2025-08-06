@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import PlayerAvatar from './PlayerAvatar';
@@ -88,6 +89,7 @@ interface PlayerADPModalProps {
 }
 
 export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPModalProps) {
+  const isMobile = useIsMobile();
   const [data, setData] = useState<PlayerADPData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -214,7 +216,7 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 md:p-8">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
             Player ADP History
@@ -271,7 +273,7 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
                 style={{ backgroundColor: data.player.team_color2 }}
               />
               
-              <div className="flex items-center gap-8 relative z-10">
+              <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center gap-8'} relative z-10`}>
                 {/* Enhanced player headshot */}
                 <div className="relative group">
                   <div className="relative">
@@ -338,7 +340,7 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
 
             {/* Enhanced Controls */}
             <div 
-              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 bg-gradient-to-r from-muted/30 to-muted/10 rounded-2xl border-l-4 shadow-sm backdrop-blur-sm"
+              className={`flex flex-col ${isMobile ? 'gap-6 p-4' : 'sm:flex-row items-start sm:items-center justify-between gap-4 p-6'} bg-gradient-to-r from-muted/30 to-muted/10 rounded-2xl border-l-4 shadow-sm backdrop-blur-sm`}
               style={{ borderLeftColor: data.player.team_color }}
             >
               <div className="flex items-center space-x-4">
@@ -439,19 +441,19 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
                 </div>
               </div>
               
-              <div className="h-96 relative">
+              <div className={`${isMobile ? 'h-[300px]' : 'h-96'} relative`}>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
                     <XAxis 
                       dataKey="date" 
                       stroke="hsl(var(--muted-foreground))"
-                      fontSize={10}
+                      fontSize={isMobile ? 8 : 10}
                       angle={-45}
                       textAnchor="end"
-                      height={70}
-                      interval="preserveStartEnd"
-                      tick={{ fontSize: 10 }}
+                      height={isMobile ? 50 : 70}
+                      interval={isMobile ? 1 : "preserveStartEnd"}
+                      tick={{ fontSize: isMobile ? 8 : 10 }}
                     />
                     <YAxis 
                       stroke="hsl(var(--muted-foreground))"
@@ -498,7 +500,7 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
             <div className="border-t border-border"></div>
             
             {/* Enhanced Platform Legend */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'}`}>
               {data.platforms.map((platform) => {
                 const platformData = data.grouped_by_platform[platform];
                 const latestData = platformData?.data[platformData.data.length - 1];

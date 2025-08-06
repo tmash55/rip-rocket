@@ -297,17 +297,17 @@ export default function PlatformComparisonTable({
           onScroll={isMobile ? syncBodyScroll : undefined}
         >
           <div className={`${isMobile ? 'px-2 py-2' : 'px-6 py-4'}`}>
-            <div className={`grid ${isMobile ? 'grid-cols-7 gap-1.5 min-w-[500px]' : 'grid-cols-8 gap-4'} items-center`}>
+            <div className={`grid grid-cols-8 ${isMobile ? 'gap-1.5 min-w-[600px]' : 'gap-4'} items-center`}>
               {/* Player Info */}
               <div className={`text-xs font-bold uppercase tracking-wider text-foreground/90 dark:text-white/90 ${
-                isMobile ? 'sticky left-0 bg-muted/30 z-30 border-r border-border pr-2' : ''
+                isMobile ? 'w-28 sticky left-0 bg-muted/30 z-30 border-r border-border pr-3 mr-4' : ''
               }`}>
                 {isMobile ? 'Player' : 'Player Info'}
               </div>
             
               {/* Enhanced sortable diff column */}
               <div 
-                className="text-xs font-bold uppercase tracking-wider text-foreground/90 dark:text-white/90 text-center cursor-pointer hover:bg-muted/60 dark:hover:bg-muted/40 transition-colors px-2 py-1.5 rounded-lg"
+                className={`text-xs font-bold uppercase tracking-wider text-foreground/90 dark:text-white/90 text-center cursor-pointer hover:bg-muted/60 dark:hover:bg-muted/40 transition-colors px-2 py-1.5 rounded-lg ${isMobile ? 'min-w-[50px]' : ''}`}
                 onClick={() => handleSort('difference')}
               >
                 <div className="flex items-center justify-center gap-1">
@@ -424,11 +424,11 @@ export default function PlatformComparisonTable({
               }`}
               onClick={() => onPlayerClick(player.player_id)}
             >
-                                          <div className={`grid ${isMobile ? 'grid-cols-7 gap-1.5 min-w-[500px]' : 'grid-cols-8 gap-3'} items-center`}>
+                                          <div className={`grid grid-cols-8 ${isMobile ? 'gap-1.5 min-w-[600px]' : 'gap-3'} items-center`}>
                 {/* Player Info */}
                 <div className={`flex items-center ${
                   isMobile 
-                    ? 'gap-1 w-32 sticky left-0 bg-card z-10 border-r border-border pr-2 py-1.5' 
+                    ? 'gap-1 w-28 sticky left-0 bg-card z-10 border-r border-border pr-3 py-1.5 mr-4' 
                     : 'gap-2.5'
                 } min-w-0`}>
                   {!isMobile && (
