@@ -236,7 +236,7 @@ export default function ADPFilters({
                     onChange={(e) => handlePlatformVisibilityChange(platformKey, e.target.checked)}
                     className="sr-only"
                   />
-                  <div className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                  <div className={`px-2 py-1 rounded text-sm font-medium transition-colors ${
                     isVisible 
                       ? 'bg-primary text-primary-foreground' 
                       : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'

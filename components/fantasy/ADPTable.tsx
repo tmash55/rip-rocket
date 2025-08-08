@@ -391,7 +391,7 @@ const PlayerRow = memo(({
     >
       <div className={`flex items-center ${isMobile ? 'px-2 py-1.5 gap-1.5' : 'px-4 py-2 gap-3'}`}>
         {/* Player Info - Fixed width and sticky on mobile */}
-        <div className={`flex items-center ${isMobile ? 'gap-1 w-32 sticky left-0 bg-card z-10 border-r border-border pr-2 py-1.5' : 'gap-2.5 w-72'} flex-shrink-0`}>
+        <div className={`flex items-center ${isMobile ? 'gap-1 w-32 sticky left-0 bg-background z-50 border-r border-border pr-2 py-1.5' : 'gap-2.5 w-72'} flex-shrink-0`}>
           <PlayerAvatar 
             headshotUrl={player.headshot_url}
             playerName={player.name}
@@ -415,7 +415,7 @@ const PlayerRow = memo(({
         </div>
 
         {/* Rankings - Responsive grid (add value columns next to each platform) */}
-        <div className={`flex-1 grid ${isMobile ? 'grid-cols-[repeat(11,minmax(0,1fr))] gap-1 min-w-[900px]' : 'grid-cols-[repeat(11,minmax(0,1fr))] gap-1.5'} items-start`}>
+        <div className={`flex-1 grid ${isMobile ? 'grid-cols-[repeat(11,minmax(80px,1fr))] gap-1 min-w-[980px]' : 'grid-cols-[repeat(11,minmax(0,1fr))] gap-1.5'} items-start`}>
           {visiblePlatforms.nfc && (
             <div className="min-w-0">
               {getRankDisplay(
@@ -429,7 +429,7 @@ const PlayerRow = memo(({
           )}
 
           {visiblePlatforms.consensus && (
-            <div className="min-w-0 border-l border-border pl-1 md:pl-2 bg-muted/10 dark:bg-muted/5 rounded-sm">
+            <div className="min-w-0 border-l border-border pl-1 md:pl-2 bg-muted/10 dark:bg-muted/5 rounded-sm relative">
               {getRankDisplay(
                 player.consensus_rank,
                 player.consensus_draft_position,
@@ -440,7 +440,7 @@ const PlayerRow = memo(({
             </div>
           )}
           {visiblePlatforms.consensus && (
-            <div className="min-w-0 bg-muted/10 dark:bg-muted/5 rounded-sm">
+            <div className="min-w-0 bg-muted/10 dark:bg-muted/5 rounded-sm relative">
               {getValueDisplay(
                 player.consensus_rank,
                 'consensus'
@@ -758,9 +758,6 @@ export default function ADPTable({
     if (!timestamp) return null
 
     try {
-      // Debug logging to trace the conversion
-      console.log("getCentralTime input:", timestamp)
-      
       // Parse the timestamp - the database returns TIMESTAMP WITHOUT TIME ZONE
       // We need to explicitly treat it as UTC since that's what's stored in the database
       let date: Date
@@ -777,13 +774,11 @@ export default function ADPTable({
         // Handle space-separated format (YYYY-MM-DD HH:MM:SS) by treating as UTC
         // Replace space with T and add Z to make it a proper UTC ISO string
         const isoString = timestamp.replace(" ", "T") + "Z"
-        console.log("Converted to ISO UTC:", isoString)
         date = new Date(isoString)
       }
 
       // Check if date is valid
       if (isNaN(date.getTime())) {
-        console.warn("Invalid timestamp:", timestamp)
         return "Invalid time"
       }
 
@@ -793,11 +788,8 @@ export default function ADPTable({
         minute: "2-digit",
         hour12: true,
       })
-      
-      console.log("getCentralTime result:", result)
       return result
     } catch (error) {
-      console.error("Error parsing timestamp:", timestamp, error)
       return "Invalid time"
     }
   }
@@ -929,10 +921,10 @@ export default function ADPTable({
           onScroll={isMobile ? syncBodyScroll : undefined}
         >
           <div className={`flex items-center ${isMobile ? 'px-2 py-2 gap-1.5' : 'px-4 py-3 gap-4'}`}>
-            <div className={`${isMobile ? 'w-32 sticky left-0 bg-muted/30 z-30 border-r border-border pr-2 py-2 flex items-center' : 'w-72'} flex-shrink-0`}>
+            <div className={`${isMobile ? 'w-32 sticky left-0 bg-background z-[60] border-r border-border pr-2 py-2 flex items-center' : 'w-72'} flex-shrink-0`}>
               <span className={`${isMobile ? 'text-[10px]' : 'text-xs'} font-semibold uppercase tracking-wider text-muted-foreground`}>Player</span>
             </div>
-            <div className={`flex-1 grid ${isMobile ? 'grid-cols-11 gap-1 min-w-[560px]' : 'grid-cols-11 gap-3'}`}>
+            <div className={`flex-1 grid ${isMobile ? 'grid-cols-[repeat(11,minmax(80px,1fr))] gap-1 min-w-[980px]' : 'grid-cols-11 gap-3'}`}>
             {visiblePlatforms.nfc && (
               <div className="col-span-1 flex items-center justify-center h-full">
                 {renderSortableHeader("nfc", PLATFORM_INFO.nfc.label, PLATFORM_INFO.nfc.description)}
