@@ -80,30 +80,39 @@ export default function ADPSmashboard() {
       )
     }
 
-    // Sort players based on selected platform
+    // Sort players based on selected column (rank or value vs NFC)
     filtered.sort((a, b) => {
-      const getRankValue = (player: any, platform: string) => {
-        switch (platform) {
+      const getValueForSort = (player: any, key: string) => {
+        const diff = (pr: number | null, nfc: number | null) =>
+          pr == null || nfc == null ? null : pr - nfc
+
+        switch (key) {
+          // Rank columns
           case 'nfc': return player.nfc_rank
           case 'consensus': return player.consensus_rank
           case 'sleeper': return player.sleeper_rank
           case 'espn': return player.espn_rank
           case 'yahoo': return player.yahoo_rank
           case 'cbs': return player.cbs_rank
+          // Value columns (delta vs NFC)
+          case 'consensus_value': return diff(player.consensus_rank, player.nfc_rank)
+          case 'sleeper_value': return diff(player.sleeper_rank, player.nfc_rank)
+          case 'espn_value': return diff(player.espn_rank, player.nfc_rank)
+          case 'yahoo_value': return diff(player.yahoo_rank, player.nfc_rank)
+          case 'cbs_value': return diff(player.cbs_rank, player.nfc_rank)
           default: return player.consensus_rank
         }
       }
 
-      const aRank = getRankValue(a, filters.sort_by)
-      const bRank = getRankValue(b, filters.sort_by)
+      const aVal = getValueForSort(a, filters.sort_by as string)
+      const bVal = getValueForSort(b, filters.sort_by as string)
 
       // Handle null values (put them at the end)
-      if (aRank === null && bRank === null) return 0
-      if (aRank === null) return 1
-      if (bRank === null) return -1
+      if (aVal == null && bVal == null) return 0
+      if (aVal == null) return 1
+      if (bVal == null) return -1
 
-      // Sort by rank
-      const comparison = aRank - bRank
+      const comparison = aVal - bVal
       return filters.sort_direction === 'asc' ? comparison : -comparison
     })
 

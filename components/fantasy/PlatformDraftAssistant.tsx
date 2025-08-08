@@ -34,6 +34,7 @@ interface PlatformPlayerAnalysis {
   name: string;
   player_position: string;
   team: string;
+  team_color?: string;
   headshot_url: string | null;
   nfc_rank: number;
   platform_rank: number;
@@ -137,6 +138,7 @@ export default function PlatformDraftAssistant() {
           name: player.name,
           player_position: player.player_position,
           team: player.team,
+          team_color: (player as any).team_color,
           headshot_url: player.headshot_url,
           nfc_rank: nfcRank,
           platform_rank: platformRank,

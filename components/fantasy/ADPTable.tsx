@@ -266,8 +266,10 @@ const PlayerRow = memo(({
   ) => {
     if (!rank || !draftPosition) {
       return (
-        <div className="flex flex-col items-center justify-center h-full py-1">
-          <span className="text-muted-foreground text-sm">-</span>
+        <div
+          className={`relative rounded-md ${isMobile ? 'p-1' : 'p-1.5'} hover:shadow-sm text-center bg-muted/30 text-muted-foreground border border-border h-11 md:h-14 flex items-center justify-center`}
+        >
+          <span className="text-sm">-</span>
         </div>
       )
     }
@@ -279,12 +281,11 @@ const PlayerRow = memo(({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-                        <div
+            <div
               className={`
                relative rounded-md ${isMobile ? 'p-1' : 'p-1.5'} hover:shadow-sm cursor-help transition-all duration-200
-               ${comparisonData.bgColor} ${comparisonData.textColor}
+               ${comparisonData.bgColor} ${comparisonData.textColor} h-11 md:h-14 flex flex-col items-center justify-center
              `}
-               style={{ minHeight: isMobile ? "36px" : "44px" }}
             >
               {/* Rank as main focal point */}
               <div className="text-center">
@@ -345,6 +346,38 @@ const PlayerRow = memo(({
     )
   }
 
+  // Render delta vs NFC for a given platform
+  const getValueDisplay = (
+    platformRank: number | null,
+    platformKey: 'consensus' | 'sleeper' | 'espn' | 'yahoo' | 'cbs'
+  ) => {
+    const baseRank = comparisonMode === 'consensus'
+      ? (platformKey === 'consensus' ? player.nfc_rank : player.consensus_rank)
+      : player.nfc_rank
+    if (!platformRank || !baseRank) {
+      return (
+        <div className="flex items-center justify-center h-full py-1">
+          <span className="text-muted-foreground text-sm">-</span>
+        </div>
+      )
+    }
+    const diff = platformRank - baseRank
+    // Reuse color thresholds from getComparisonData with current baseline
+    const styles = getComparisonData(platformRank, baseRank, 'value')
+    return (
+      <div
+        className={`relative rounded-md ${isMobile ? 'p-1' : 'p-1.5'} text-center ${styles.bgColor} ${styles.textColor} h-11 md:h-14 flex flex-col items-center justify-center`}
+      >
+        <div className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold leading-none mb-0.5`}>
+          {diff > 0 ? '+' : ''}{diff}
+        </div>
+        {!isMobile && (
+          <div className="text-[10px] opacity-75 leading-none mt-0.5">vs {(baseRank === player.nfc_rank ? 'NFC' : 'CONSENSUS')}</div>
+        )}
+      </div>
+    )
+  }
+
 
 
   if (!isVisible) {
@@ -381,8 +414,8 @@ const PlayerRow = memo(({
           </div>
         </div>
 
-        {/* Rankings - Responsive grid */}
-        <div className={`flex-1 grid ${isMobile ? 'grid-cols-6 gap-1 min-w-[300px]' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-1.5'} items-start`}>
+        {/* Rankings - Responsive grid (add value columns next to each platform) */}
+        <div className={`flex-1 grid ${isMobile ? 'grid-cols-[repeat(11,minmax(0,1fr))] gap-1 min-w-[900px]' : 'grid-cols-[repeat(11,minmax(0,1fr))] gap-1.5'} items-start`}>
           {visiblePlatforms.nfc && (
             <div className="min-w-0">
               {getRankDisplay(
@@ -396,7 +429,7 @@ const PlayerRow = memo(({
           )}
 
           {visiblePlatforms.consensus && (
-            <div className="min-w-0">
+            <div className="min-w-0 border-l border-border pl-1 md:pl-2 bg-muted/10 dark:bg-muted/5 rounded-sm">
               {getRankDisplay(
                 player.consensus_rank,
                 player.consensus_draft_position,
@@ -406,9 +439,17 @@ const PlayerRow = memo(({
               )}
             </div>
           )}
+          {visiblePlatforms.consensus && (
+            <div className="min-w-0 bg-muted/10 dark:bg-muted/5 rounded-sm">
+              {getValueDisplay(
+                player.consensus_rank,
+                'consensus'
+              )}
+            </div>
+          )}
 
           {visiblePlatforms.sleeper && (
-            <div className="min-w-0">
+            <div className="min-w-0 border-l border-border pl-1 md:pl-2">
               {getRankDisplay(
                 player.sleeper_rank,
                 player.sleeper_draft_position,
@@ -418,9 +459,17 @@ const PlayerRow = memo(({
               )}
             </div>
           )}
+          {visiblePlatforms.sleeper && (
+            <div className="min-w-0">
+              {getValueDisplay(
+                player.sleeper_rank,
+                'sleeper'
+              )}
+            </div>
+          )}
 
           {visiblePlatforms.espn && (
-            <div className="min-w-0">
+            <div className="min-w-0 border-l border-border pl-1 md:pl-2 bg-muted/10 dark:bg-muted/5 rounded-sm">
               {getRankDisplay(
                 player.espn_rank,
                 player.espn_draft_position,
@@ -430,9 +479,17 @@ const PlayerRow = memo(({
               )}
             </div>
           )}
+          {visiblePlatforms.espn && (
+            <div className="min-w-0 bg-muted/10 dark:bg-muted/5 rounded-sm">
+              {getValueDisplay(
+                player.espn_rank,
+                'espn'
+              )}
+            </div>
+          )}
 
           {visiblePlatforms.yahoo && (
-            <div className="min-w-0">
+            <div className="min-w-0 border-l border-border pl-1 md:pl-2">
               {getRankDisplay(
                 player.yahoo_rank,
                 player.yahoo_draft_position,
@@ -442,15 +499,31 @@ const PlayerRow = memo(({
               )}
             </div>
           )}
+          {visiblePlatforms.yahoo && (
+            <div className="min-w-0">
+              {getValueDisplay(
+                player.yahoo_rank,
+                'yahoo'
+              )}
+            </div>
+          )}
 
           {visiblePlatforms.cbs && (
-            <div className="min-w-0">
+            <div className="min-w-0 border-l border-border pl-1 md:pl-2 bg-muted/10 dark:bg-muted/5 rounded-sm">
               {getRankDisplay(
                 player.cbs_rank,
                 player.cbs_draft_position,
                 player.cbs_position_rank,
                 player.player_position,
                 "cbs",
+              )}
+            </div>
+          )}
+          {visiblePlatforms.cbs && (
+            <div className="min-w-0 bg-muted/10 dark:bg-muted/5 rounded-sm">
+              {getValueDisplay(
+                player.cbs_rank,
+                'cbs'
               )}
             </div>
           )}
@@ -646,6 +719,19 @@ export default function ADPTable({
     syncHeaderScroll(e) // Sync header scroll
   }, [handleScroll, syncHeaderScroll])
 
+  // Keep header columns aligned with body when body shows vertical scrollbar
+  useEffect(() => {
+    const updateHeaderPadding = () => {
+      if (!headerScrollRef.current || !bodyScrollRef.current) return
+      const el = bodyScrollRef.current
+      const scrollbarWidth = el.offsetWidth - el.clientWidth
+      headerScrollRef.current.style.paddingRight = scrollbarWidth > 0 ? `${scrollbarWidth}px` : '0px'
+    }
+    updateHeaderPadding()
+    window.addEventListener('resize', updateHeaderPadding)
+    return () => window.removeEventListener('resize', updateHeaderPadding)
+  }, [players.length, isMobile])
+
   // Preload images for better performance
   useEffect(() => {
     const preloadImages = () => {
@@ -755,6 +841,44 @@ export default function ADPTable({
     </TooltipProvider>
   )
 
+  // Render paired header: platform name (static) + two sortable sub-headers (Rank, Value)
+  const renderPlatformPairHeader = (platformKey: ADPFiltersState["sort_by"], label: string, zebra?: boolean) => {
+    const isActiveRank = sortBy === platformKey
+    const valueKey = `${platformKey}_value` as ADPFiltersState["sort_by"]
+    const isActiveValue = sortBy === valueKey
+    return (
+      <div className={`col-span-2 border-l border-border pl-1 md:pl-2 ${zebra ? 'bg-muted/10 dark:bg-muted/5 rounded-sm' : ''}`}> 
+        <div className={`${isMobile ? 'text-[10px]' : 'text-xs'} font-semibold uppercase tracking-wider text-muted-foreground text-center mb-1`}>
+          {label}
+        </div>
+        <div className="grid grid-cols-2 gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleSort(platformKey)}
+            className={`h-auto ${isMobile ? 'p-1' : 'p-2'} flex items-center justify-center gap-1 hover:bg-muted/50`}
+          >
+            <span className={`${isMobile ? 'text-[10px]' : 'text-xs'} font-semibold uppercase`}>Rank</span>
+            {isActiveRank && (
+              <span className="text-primary">{sortDirection === 'asc' ? <ChevronDown className={`${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`} /> : <ChevronUp className={`${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`} />}</span>
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleSort(valueKey)}
+            className={`h-auto ${isMobile ? 'p-1' : 'p-2'} flex items-center justify-center gap-1 hover:bg-muted/50`}
+          >
+            <span className={`${isMobile ? 'text-[10px]' : 'text-xs'} font-semibold uppercase`}>Value</span>
+            {isActiveValue && (
+              <span className="text-primary">{sortDirection === 'asc' ? <ChevronDown className={`${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`} /> : <ChevronUp className={`${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`} />}</span>
+            )}
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
   // Determine which players to render with stable reference
   const visiblePlayers = useMemo(() => {
     return players.slice(visibleRange.start, visibleRange.end)
@@ -808,19 +932,17 @@ export default function ADPTable({
             <div className={`${isMobile ? 'w-32 sticky left-0 bg-muted/30 z-30 border-r border-border pr-2 py-2 flex items-center' : 'w-72'} flex-shrink-0`}>
               <span className={`${isMobile ? 'text-[10px]' : 'text-xs'} font-semibold uppercase tracking-wider text-muted-foreground`}>Player</span>
             </div>
-            <div className={`flex-1 grid ${isMobile ? 'grid-cols-6 gap-1 min-w-[300px]' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3'}`}>
-            {visiblePlatforms.nfc &&
-              renderSortableHeader("nfc", PLATFORM_INFO.nfc.label, PLATFORM_INFO.nfc.description)}
-            {visiblePlatforms.consensus &&
-              renderSortableHeader("consensus", PLATFORM_INFO.consensus.label, PLATFORM_INFO.consensus.description)}
-            {visiblePlatforms.sleeper &&
-              renderSortableHeader("sleeper", PLATFORM_INFO.sleeper.label, PLATFORM_INFO.sleeper.description)}
-            {visiblePlatforms.espn &&
-              renderSortableHeader("espn", PLATFORM_INFO.espn.label, PLATFORM_INFO.espn.description)}
-            {visiblePlatforms.yahoo &&
-              renderSortableHeader("yahoo", PLATFORM_INFO.yahoo.label, PLATFORM_INFO.yahoo.description)}
-            {visiblePlatforms.cbs &&
-              renderSortableHeader("cbs", PLATFORM_INFO.cbs.label, PLATFORM_INFO.cbs.description)}
+            <div className={`flex-1 grid ${isMobile ? 'grid-cols-11 gap-1 min-w-[560px]' : 'grid-cols-11 gap-3'}`}>
+            {visiblePlatforms.nfc && (
+              <div className="col-span-1 flex items-center justify-center h-full">
+                {renderSortableHeader("nfc", PLATFORM_INFO.nfc.label, PLATFORM_INFO.nfc.description)}
+              </div>
+            )}
+            {visiblePlatforms.consensus && renderPlatformPairHeader("consensus", PLATFORM_INFO.consensus.label, true)}
+            {visiblePlatforms.sleeper && renderPlatformPairHeader("sleeper", PLATFORM_INFO.sleeper.label, false)}
+            {visiblePlatforms.espn && renderPlatformPairHeader("espn", PLATFORM_INFO.espn.label, true)}
+            {visiblePlatforms.yahoo && renderPlatformPairHeader("yahoo", PLATFORM_INFO.yahoo.label, false)}
+            {visiblePlatforms.cbs && renderPlatformPairHeader("cbs", PLATFORM_INFO.cbs.label, true)}
           </div>
         </div>
         </div>

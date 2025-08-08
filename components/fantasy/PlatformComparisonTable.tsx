@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState, useMemo, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -187,6 +187,15 @@ export default function PlatformComparisonTable({
   const bodyScrollRef = useRef<HTMLDivElement>(null);
   const isValue = type === 'value';
 
+  // Local sorting fallback when parent doesn't manage sorting
+  const [localSortBy, setLocalSortBy] = useState<string>(sortBy);
+  const [localSortDirection, setLocalSortDirection] = useState<'asc' | 'desc'>(sortDirection);
+
+  useEffect(() => {
+    setLocalSortBy(sortBy);
+    setLocalSortDirection(sortDirection);
+  }, [sortBy, sortDirection]);
+
   // Sync horizontal scroll between header and body on mobile
   const syncHeaderScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
     if (isMobile && headerScrollRef.current) {
@@ -208,8 +217,56 @@ export default function PlatformComparisonTable({
       } else {
         onSortChange(column, 'desc');
       }
+      return;
+    }
+
+    // Local sorting management
+    if (localSortBy === column) {
+      setLocalSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setLocalSortBy(column);
+      setLocalSortDirection('desc');
     }
   };
+
+  const effectiveSortBy = onSortChange ? sortBy : localSortBy;
+  const effectiveSortDirection = onSortChange ? sortDirection : localSortDirection;
+
+  const sortedPlayers = useMemo(() => {
+    const withSafe = [...players];
+    const getRoundFromRank = (rank?: number | null) => {
+      if (rank == null) return Number.POSITIVE_INFINITY;
+      return Math.ceil(rank / 12);
+    };
+    const valueOf = (p: any, key: string) => {
+      switch (key) {
+        case 'difference':
+          return p.difference ?? 0;
+        case 'nfc_overall':
+          return p.nfc_rank ?? Number.POSITIVE_INFINITY;
+        case 'platform_overall':
+          return p.platform_rank ?? Number.POSITIVE_INFINITY;
+        case 'nfc_position':
+          return p.nfc_position_rank ?? Number.POSITIVE_INFINITY;
+        case 'platform_position':
+          return p.platform_position_rank ?? Number.POSITIVE_INFINITY;
+        case 'nfc_round':
+          return p.nfc_round ?? getRoundFromRank(p.nfc_rank);
+        case 'platform_round':
+          return p.platform_round ?? getRoundFromRank(p.platform_rank);
+        default:
+          return 0;
+      }
+    };
+    withSafe.sort((a, b) => {
+      const aVal = valueOf(a, effectiveSortBy);
+      const bVal = valueOf(b, effectiveSortBy);
+      if (aVal === bVal) return 0;
+      const result = aVal < bVal ? -1 : 1;
+      return effectiveSortDirection === 'asc' ? result : -result;
+    });
+    return withSafe;
+  }, [players, effectiveSortBy, effectiveSortDirection]);
   
   if (players.length === 0) {
     return (
@@ -312,9 +369,9 @@ export default function PlatformComparisonTable({
               >
                 <div className="flex items-center justify-center gap-1">
                   <span>{isMobile ? 'Diff' : 'Difference'}</span>
-                  {sortBy === 'difference' && (
+                  {effectiveSortBy === 'difference' && (
                     <div className="text-primary">
-                      {sortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                      {effectiveSortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                     </div>
                   )}
                 </div>
@@ -322,7 +379,8 @@ export default function PlatformComparisonTable({
               
               {/* NFC Overall */}
               <div 
-                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border"
+                onClick={() => handleSort('nfc_overall')}
+                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border cursor-pointer hover:bg-muted/60 dark:hover:bg-muted/40"
                 style={{ 
                   backgroundColor: `${getPlatformColor('NFC')}25`,
                   borderColor: `${getPlatformColor('NFC')}50`,
@@ -330,12 +388,18 @@ export default function PlatformComparisonTable({
                 }}
               >
                 <div>NFC</div>
-                {!isMobile && <div className="text-[10px] opacity-80">Overall</div>}
+                <div className="flex items-center justify-center gap-1 text-[10px] opacity-80">
+                  {!isMobile ? 'Overall' : ''}
+                  {effectiveSortBy === 'nfc_overall' && (
+                    <span className="text-primary">{effectiveSortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}</span>
+                  )}
+                </div>
               </div>
 
               {/* Platform Overall */}
               <div 
-                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border"
+                onClick={() => handleSort('platform_overall')}
+                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border cursor-pointer hover:bg-muted/60 dark:hover:bg-muted/40"
                 style={{ 
                   backgroundColor: `${getPlatformColor(platform)}25`,
                   borderColor: `${getPlatformColor(platform)}50`,
@@ -343,12 +407,18 @@ export default function PlatformComparisonTable({
                 }}
               >
                 <div>{platform}</div>
-                {!isMobile && <div className="text-[10px] opacity-80">Overall</div>}
+                <div className="flex items-center justify-center gap-1 text-[10px] opacity-80">
+                  {!isMobile ? 'Overall' : ''}
+                  {effectiveSortBy === 'platform_overall' && (
+                    <span className="text-primary">{effectiveSortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}</span>
+                  )}
+                </div>
               </div>
 
               {/* NFC Position */}
               <div 
-                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border"
+                onClick={() => handleSort('nfc_position')}
+                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border cursor-pointer hover:bg-muted/60 dark:hover:bg-muted/40"
                 style={{ 
                   backgroundColor: `${getPlatformColor('NFC')}25`,
                   borderColor: `${getPlatformColor('NFC')}50`,
@@ -356,13 +426,18 @@ export default function PlatformComparisonTable({
                 }}
               >
                 <div>NFC</div>
-                {!isMobile && <div className="text-[10px] opacity-80">Position</div>}
-                {isMobile && <div className="text-[10px] opacity-80">Pos</div>}
+                <div className="flex items-center justify-center gap-1 text-[10px] opacity-80">
+                  {!isMobile ? 'Position' : 'Pos'}
+                  {effectiveSortBy === 'nfc_position' && (
+                    <span className="text-primary">{effectiveSortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}</span>
+                  )}
+                </div>
               </div>
 
               {/* Platform Position */}
               <div 
-                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border"
+                onClick={() => handleSort('platform_position')}
+                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border cursor-pointer hover:bg-muted/60 dark:hover:bg-muted/40"
                 style={{ 
                   backgroundColor: `${getPlatformColor(platform)}25`,
                   borderColor: `${getPlatformColor(platform)}50`,
@@ -370,13 +445,18 @@ export default function PlatformComparisonTable({
                 }}
               >
                 <div>{platform}</div>
-                {!isMobile && <div className="text-[10px] opacity-80">Position</div>}
-                {isMobile && <div className="text-[10px] opacity-80">Pos</div>}
+                <div className="flex items-center justify-center gap-1 text-[10px] opacity-80">
+                  {!isMobile ? 'Position' : 'Pos'}
+                  {effectiveSortBy === 'platform_position' && (
+                    <span className="text-primary">{effectiveSortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}</span>
+                  )}
+                </div>
               </div>
 
               {/* NFC Round */}
               <div 
-                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border"
+                onClick={() => handleSort('nfc_round')}
+                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border cursor-pointer hover:bg-muted/60 dark:hover:bg-muted/40"
                 style={{ 
                   backgroundColor: `${getPlatformColor('NFC')}25`,
                   borderColor: `${getPlatformColor('NFC')}50`,
@@ -384,13 +464,18 @@ export default function PlatformComparisonTable({
                 }}
               >
                 <div>NFC</div>
-                {!isMobile && <div className="text-[10px] opacity-80">Round</div>}
-                {isMobile && <div className="text-[10px] opacity-80">Rnd</div>}
+                <div className="flex items-center justify-center gap-1 text-[10px] opacity-80">
+                  {!isMobile ? 'Round' : 'Rnd'}
+                  {effectiveSortBy === 'nfc_round' && (
+                    <span className="text-primary">{effectiveSortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}</span>
+                  )}
+                </div>
               </div>
 
               {/* Platform Round */}
               <div 
-                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border"
+                onClick={() => handleSort('platform_round')}
+                className="text-xs font-bold uppercase tracking-wider text-center px-2 py-1.5 rounded-lg border cursor-pointer hover:bg-muted/60 dark:hover:bg-muted/40"
                 style={{ 
                   backgroundColor: `${getPlatformColor(platform)}25`,
                   borderColor: `${getPlatformColor(platform)}50`,
@@ -398,8 +483,12 @@ export default function PlatformComparisonTable({
                 }}
               >
                 <div>{platform}</div>
-                {!isMobile && <div className="text-[10px] opacity-80">Round</div>}
-                {isMobile && <div className="text-[10px] opacity-80">Rnd</div>}
+                <div className="flex items-center justify-center gap-1 text-[10px] opacity-80">
+                  {!isMobile ? 'Round' : 'Rnd'}
+                  {effectiveSortBy === 'platform_round' && (
+                    <span className="text-primary">{effectiveSortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}</span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -413,7 +502,7 @@ export default function PlatformComparisonTable({
         style={{ maxHeight: "700px" }}
         onScroll={isMobile ? syncHeaderScroll : undefined}
       >
-        {players.map((player, index) => {
+        {(onSortChange ? players : sortedPlayers).map((player, index) => {
           const isValue = type === 'value';
           
           return (
