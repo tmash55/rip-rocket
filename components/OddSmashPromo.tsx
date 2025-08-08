@@ -24,14 +24,18 @@ export default function OddSmashPromo() {
     try {
       const stored = localStorage.getItem(DISMISS_KEY)
       setIsDismissed(stored === "1")
-    } catch {}
+    } catch {
+      // Intentionally ignore: localStorage may be unavailable or blocked
+    }
   }, [])
 
   const handleDismiss = () => {
     setIsDismissed(true)
     try {
       localStorage.setItem(DISMISS_KEY, "1")
-    } catch {}
+    } catch {
+      // Intentionally ignore: non-critical if persisting dismissal fails
+    }
   }
 
   if (!hasMounted || isDismissed) return null
