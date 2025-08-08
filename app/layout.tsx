@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { getSEOTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
+import OddSmashPromo from "@/components/OddSmashPromo";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/react"
@@ -37,7 +38,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 								<Suspense fallback={<div className="min-h-screen flex items-center justify-center">
 									<div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
 								</div>}>
-									{children}
+                                        {children}
+                                        <OddSmashPromo />
 									<Analytics />
 								</Suspense>
 							</main>
