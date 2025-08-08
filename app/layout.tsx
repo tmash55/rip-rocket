@@ -5,6 +5,7 @@ import { getSEOTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/react"
 
 
 import Providers from "@/components/providers/QueryClient";
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 									<div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
 								</div>}>
 									{children}
+									<Analytics />
 								</Suspense>
 							</main>
 							<Footer />
