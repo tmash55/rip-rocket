@@ -36,7 +36,7 @@ export const StatefulButton = React.forwardRef<HTMLButtonElement, StatefulButton
       <Button
         ref={ref}
         className={className}
-        disabled={disabled ?? showLoading || showSuccess}
+        disabled={disabled ?? (showLoading || showSuccess)}
         aria-busy={showLoading || undefined}
         {...props}
       >
