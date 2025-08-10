@@ -35,9 +35,7 @@ interface ADPPlayer {
   yahoo_rank: number | null
   yahoo_draft_position: string | null
   yahoo_position_rank: number | null
-  cbs_rank: number | null
-  cbs_draft_position: string | null
-  cbs_position_rank: number | null
+  // CBS removed
 }
 
 interface ADPFiltersState {
@@ -47,7 +45,7 @@ interface ADPFiltersState {
     sleeper: boolean
     espn: boolean
     yahoo: boolean
-    cbs: boolean
+    // CBS removed
   }
   sort_by: string
   sort_direction: "asc" | "desc"
@@ -349,7 +347,7 @@ const PlayerRow = memo(({
   // Render delta vs NFC for a given platform
   const getValueDisplay = (
     platformRank: number | null,
-    platformKey: 'consensus' | 'sleeper' | 'espn' | 'yahoo' | 'cbs'
+    platformKey: 'consensus' | 'sleeper' | 'espn' | 'yahoo'
   ) => {
     const baseRank = comparisonMode === 'consensus'
       ? (platformKey === 'consensus' ? player.nfc_rank : player.consensus_rank)
@@ -415,7 +413,7 @@ const PlayerRow = memo(({
         </div>
 
         {/* Rankings - Responsive grid (add value columns next to each platform) */}
-        <div className={`flex-1 grid ${isMobile ? 'grid-cols-[repeat(11,minmax(80px,1fr))] gap-1 min-w-[980px]' : 'grid-cols-[repeat(11,minmax(0,1fr))] gap-1.5'} items-start`}>
+        <div className={`flex-1 grid ${isMobile ? 'grid-cols-[repeat(9,minmax(80px,1fr))] gap-1 min-w-[980px]' : 'grid-cols-[repeat(9,minmax(0,1fr))] gap-1.5'} items-start`}>
           {visiblePlatforms.nfc && (
             <div className="min-w-0">
               {getRankDisplay(
@@ -508,25 +506,7 @@ const PlayerRow = memo(({
             </div>
           )}
 
-          {visiblePlatforms.cbs && (
-            <div className="min-w-0 border-l border-border pl-1 md:pl-2 bg-muted/10 dark:bg-muted/5 rounded-sm">
-              {getRankDisplay(
-                player.cbs_rank,
-                player.cbs_draft_position,
-                player.cbs_position_rank,
-                player.player_position,
-                "cbs",
-              )}
-            </div>
-          )}
-          {visiblePlatforms.cbs && (
-            <div className="min-w-0 bg-muted/10 dark:bg-muted/5 rounded-sm">
-              {getValueDisplay(
-                player.cbs_rank,
-                'cbs'
-              )}
-            </div>
-          )}
+          
         </div>
       </div>
     </div>
@@ -924,7 +904,7 @@ export default function ADPTable({
             <div className={`${isMobile ? 'w-32 sticky left-0 bg-background z-[60] border-r border-border pr-2 py-2 flex items-center' : 'w-72'} flex-shrink-0`}>
               <span className={`${isMobile ? 'text-[10px]' : 'text-xs'} font-semibold uppercase tracking-wider text-muted-foreground`}>Player</span>
             </div>
-            <div className={`flex-1 grid ${isMobile ? 'grid-cols-[repeat(11,minmax(80px,1fr))] gap-1 min-w-[980px]' : 'grid-cols-11 gap-3'}`}>
+            <div className={`flex-1 grid ${isMobile ? 'grid-cols-[repeat(9,minmax(80px,1fr))] gap-1 min-w-[980px]' : 'grid-cols-9 gap-3'}`}>
             {visiblePlatforms.nfc && (
               <div className="col-span-1 flex items-center justify-center h-full">
                 {renderSortableHeader("nfc", PLATFORM_INFO.nfc.label, PLATFORM_INFO.nfc.description)}
@@ -934,7 +914,7 @@ export default function ADPTable({
             {visiblePlatforms.sleeper && renderPlatformPairHeader("sleeper", PLATFORM_INFO.sleeper.label, false)}
             {visiblePlatforms.espn && renderPlatformPairHeader("espn", PLATFORM_INFO.espn.label, true)}
             {visiblePlatforms.yahoo && renderPlatformPairHeader("yahoo", PLATFORM_INFO.yahoo.label, false)}
-            {visiblePlatforms.cbs && renderPlatformPairHeader("cbs", PLATFORM_INFO.cbs.label, true)}
+            
           </div>
         </div>
         </div>

@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Platform vs Sharp ADP - Fantasy Football Draft Values | OddsMash',
-  description: 'Compare platform rankings against high-stakes league consensus (NFC). Find value picks and avoid busts across ESPN, Yahoo, Sleeper, and CBS.',
+  description: 'Compare platform rankings against high-stakes league consensus (NFC). Find value picks and avoid busts across ESPN, Yahoo, and Sleeper.',
   keywords: 'fantasy football values, draft steals, platform comparison, NFC rankings, sleepers, busts, ESPN vs NFC, fantasy football analysis',
 }
 

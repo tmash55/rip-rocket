@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'ADP Smashboard - Fantasy Football Draft Value | OddsMash',
-  description: 'Compare average draft positions across ESPN, Yahoo, Sleeper, NFC, and CBS. Find value picks and dominate your fantasy football draft.',
+  description: 'Compare average draft positions across ESPN, Yahoo, Sleeper, and NFC. Find value picks and dominate your fantasy football draft.',
   keywords: 'fantasy football, ADP, average draft position, draft tool, ESPN, Yahoo, Sleeper, fantasy football rankings',
 }
 
@@ -36,6 +36,15 @@ export default function ADPSmashboardPage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
+        {/* Methodology Note */}
+        <div className="mb-6 rounded-xl border border-border/60 bg-card/50 p-4 text-sm text-muted-foreground">
+          <p>
+            These values are based on each platform’s live draftroom rankings — the lists your league mates
+            actually see and sort by on draft day. We build a consensus from <strong>Sleeper</strong>,
+            <strong> ESPN</strong>, and <strong>Yahoo</strong> rankings, then compare those rankings against
+            high-stakes ADP from <strong>NFC</strong> (Rotowire Online) to surface value and reach spots.
+          </p>
+        </div>
         <ADPSmashboard />
       </div>
 
@@ -69,7 +78,7 @@ export default function ADPSmashboardPage() {
                 Platform Comparison
               </h3>
               <p className="text-muted-foreground leading-relaxed">
-                Compare rankings across ESPN, Yahoo, Sleeper, CBS, and NFC Sharp. 
+                Compare rankings across ESPN, Yahoo, Sleeper, and NFC Sharp. 
                 See exactly where each platform values every player.
               </p>
             </div>

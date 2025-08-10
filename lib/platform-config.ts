@@ -4,7 +4,6 @@ export const PLATFORM_COLORS: Record<string, string> = {
   'ESPN': '#de0000',
   'Yahoo': '#6002D2', 
   'Sleeper': '#15273A',
-  'CBS Sports': '#004ACD',
   'NFC': '#23A0A0',
   'Consensus': '#F97316',
 };
@@ -39,12 +38,6 @@ export const PLATFORM_INFO = {
     description: "Yahoo Fantasy Rankings", 
     color: PLATFORM_COLORS['Yahoo'],
     slug: 'yahoo'
-  },
-  cbs: { 
-    label: "CBS Sports", 
-    description: "CBS Sports Rankings", 
-    color: PLATFORM_COLORS['CBS Sports'],
-    slug: 'cbs'
   },
 };
 

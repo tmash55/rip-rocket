@@ -43,10 +43,7 @@ export default function ADPFilters({
       'ESPN Position Rank',
       'Yahoo Rank',
       'Yahoo Draft Position',
-      'Yahoo Position Rank',
-      'CBS Rank',
-      'CBS Draft Position',
-      'CBS Position Rank'
+      'Yahoo Position Rank'
     ]
 
     // Convert data to CSV format
@@ -68,10 +65,7 @@ export default function ADPFilters({
       player.espn_position_rank || '',
       player.yahoo_rank || '',
       player.yahoo_draft_position || '',
-      player.yahoo_position_rank || '',
-      player.cbs_rank || '',
-      player.cbs_draft_position || '',
-      player.cbs_position_rank || ''
+      player.yahoo_position_rank || ''
     ])
 
     // Create CSV content

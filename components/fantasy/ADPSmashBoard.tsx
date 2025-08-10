@@ -26,8 +26,7 @@ export default function ADPSmashboard() {
       consensus: true,
       sleeper: true,
       espn: true,
-      yahoo: true,
-      cbs: true
+      yahoo: true
     },
     sort_by: 'consensus', // Default sort by consensus
     sort_direction: 'asc', // Default ascending (best rank first)
@@ -93,13 +92,11 @@ export default function ADPSmashboard() {
           case 'sleeper': return player.sleeper_rank
           case 'espn': return player.espn_rank
           case 'yahoo': return player.yahoo_rank
-          case 'cbs': return player.cbs_rank
           // Value columns (delta vs NFC)
           case 'consensus_value': return diff(player.consensus_rank, player.nfc_rank)
           case 'sleeper_value': return diff(player.sleeper_rank, player.nfc_rank)
           case 'espn_value': return diff(player.espn_rank, player.nfc_rank)
           case 'yahoo_value': return diff(player.yahoo_rank, player.nfc_rank)
-          case 'cbs_value': return diff(player.cbs_rank, player.nfc_rank)
           default: return player.consensus_rank
         }
       }
@@ -219,7 +216,7 @@ export default function ADPSmashboard() {
           💡 How to Use ADP Smashboard
         </h4>
         <ul className="text-sm text-muted-foreground space-y-1">
-          <li>• <strong>Consensus Rank:</strong> Average ranking across ESPN, Sleeper, Yahoo, and CBS</li>
+          <li>• <strong>Consensus Rank:</strong> Average ranking across ESPN, Sleeper, and Yahoo</li>
           <li>• <strong>Draft Position:</strong> Round.Pick format (e.g., 1.05 = 1st round, 5th pick)</li>
           <li>• <strong>Find Value:</strong> Look for big differences between platforms</li>
           <li>• <strong>League Size:</strong> Adjust to match your league for accurate draft positions</li>

@@ -17,7 +17,7 @@ const PLATFORMS = [
   { id: 'ESPN', name: 'ESPN', color: '#de0000', icon: '🔴' },
   { id: 'Sleeper', name: 'Sleeper', color: '#0B4F71', icon: '🔵' },
   { id: 'Yahoo', name: 'Yahoo', color: '#6002D2', icon: '🟣' },
-  { id: 'CBS Sports', name: 'CBS', color: '#004ACD', icon: '🔵' },
+  
 ];
 
 // Fetch function for React Query (shared with ADPSmashBoard)
@@ -117,13 +117,7 @@ export default function PlatformDraftAssistant() {
           platformPick = player.sleeper_pick;
           platformDraftPosition = player.sleeper_draft_position;
           break;
-        case 'cbs sports':
-          platformRank = player.cbs_rank;
-          platformPositionRank = player.cbs_position_rank;
-          platformRound = player.cbs_round;
-          platformPick = player.cbs_pick;
-          platformDraftPosition = player.cbs_draft_position;
-          break;
+        
       }
 
       if (!nfcRank || !platformRank) return;

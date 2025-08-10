@@ -51,11 +51,7 @@ interface ADPPlayer {
   nfc_round: number | null
   nfc_pick: number | null
   nfc_draft_position: string | null
-  cbs_rank: number | null
-  cbs_position_rank: number | null
-  cbs_round: number | null
-  cbs_pick: number | null
-  cbs_draft_position: string | null
+  // CBS removed
   last_updated: string
 }
 
@@ -80,7 +76,7 @@ export async function GET(request: Request) {
     const supabase = createClient()
 
     // Call the RPC function
-    const { data, error } = await supabase.rpc('get_fantasy_adp_enhanced', validatedParams)
+    const { data, error } = await supabase.rpc('get_fantasy_values_enhanced', validatedParams)
 
     if (error) {
       console.error('[/api/fantasy-adp] Supabase RPC error:', error)
@@ -133,11 +129,6 @@ export async function GET(request: Request) {
       nfc_round: player.nfc_round,
       nfc_pick: player.nfc_pick,
       nfc_draft_position: player.nfc_draft_position,
-      cbs_rank: player.cbs_rank,
-      cbs_position_rank: player.cbs_position_rank,
-      cbs_round: player.cbs_round,
-      cbs_pick: player.cbs_pick,
-      cbs_draft_position: player.cbs_draft_position,
       last_updated: player.last_updated,
     }))
 

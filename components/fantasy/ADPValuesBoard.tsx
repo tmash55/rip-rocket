@@ -27,7 +27,6 @@ const PLATFORM_NAMES: Record<string, string> = {
   'espn': 'ESPN',
   'yahoo': 'Yahoo',
   'sleeper': 'Sleeper',
-  'cbs': 'CBS Sports',
   'nfc': 'NFC',
   'consensus': 'Consensus'
 }
@@ -37,7 +36,6 @@ const PLATFORM_COLORS: Record<string, string> = {
   'ESPN': '#de0000',
   'Yahoo': '#6002D2', 
   'Sleeper': '#15273A',
-  'CBS Sports': '#004ACD',
   'NFC': '#23A0A0',
   'Consensus': '#F97316'
 }
@@ -67,8 +65,7 @@ export default function ADPValuesBoard() {
       consensus: true,
       sleeper: true,
       espn: true,
-      yahoo: true,
-      cbs: true
+      yahoo: true
     },
     sort_by: 'consensus',
     sort_direction: 'asc',
@@ -107,7 +104,6 @@ export default function ADPValuesBoard() {
         espn: player.espn_rank,
         yahoo: player.yahoo_rank,
         sleeper: player.sleeper_rank,
-        cbs: player.cbs_rank,
         consensus: player.consensus_rank
       }
 

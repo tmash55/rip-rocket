@@ -40,11 +40,7 @@ export interface ADPPlayer {
     nfc_pick: number | null
     nfc_draft_position: string | null
     
-    cbs_rank: number | null
-    cbs_position_rank: number | null
-    cbs_round: number | null
-    cbs_pick: number | null
-    cbs_draft_position: string | null
+    // CBS removed
     
     last_updated: string
   }
@@ -75,9 +71,9 @@ export interface ADPPlayer {
       sleeper: boolean
       espn: boolean
       yahoo: boolean
-      cbs: boolean
+      // CBS removed
     }
-    sort_by: 'nfc' | 'consensus' | 'sleeper' | 'espn' | 'yahoo' | 'cbs'
+    sort_by: 'nfc' | 'consensus' | 'sleeper' | 'espn' | 'yahoo'
     sort_direction: 'asc' | 'desc'
     // Pagination options
     pagination_enabled: boolean
@@ -111,7 +107,7 @@ export interface ADPPlayer {
     },
     consensus: {
       label: 'Consensus',
-      description: 'Average ranking across CBS, Sleeper, ESPN, and Yahoo platforms',
+      description: 'Average ranking across Sleeper, ESPN, and Yahoo platforms',
       color: 'purple'
     },
     sleeper: {
@@ -128,11 +124,6 @@ export interface ADPPlayer {
       label: 'Yahoo',
       description: 'Established fantasy platform with large user base and reliable rankings',
       color: 'purple'
-    },
-    cbs: {
-      label: 'CBS',
-      description: 'CBS Sports fantasy rankings with expert analysis and projections',
-      color: 'blue'
     }
   }
   
@@ -165,5 +156,4 @@ export interface ADPPlayer {
     { key: 'espn', name: 'ESPN', shortName: 'ESPN', color: 'bg-red-500' },
     { key: 'yahoo', name: 'Yahoo', shortName: 'YAH', color: 'bg-purple-600' },
     { key: 'nfc', name: 'NFC', shortName: 'NFC', color: 'bg-blue-500' },
-    { key: 'cbs', name: 'CBS', shortName: 'CBS', color: 'bg-blue-600' },
   ]
