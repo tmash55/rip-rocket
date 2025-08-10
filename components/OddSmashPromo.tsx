@@ -4,15 +4,23 @@ import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import { X } from "lucide-react"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { usePathname } from "next/navigation"
 
 type Placement = "footer" | "sidebar"
 
-const DISMISS_KEY = "oddsmash_promo_dismissed_v1"
+const BASE_DISMISS_KEY = "oddsmash_promo_dismissed_v1"
 
 export default function OddSmashPromo() {
+  const pathname = usePathname()
   const isMobile = useIsMobile()
   const [isDismissed, setIsDismissed] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
+
+  // Use a separate dismissal key on ADP routes so a prior dismissal elsewhere doesn't hide it here
+  const dismissKey = useMemo(
+    () => (pathname?.startsWith("/adp") ? `${BASE_DISMISS_KEY}_adp` : BASE_DISMISS_KEY),
+    [pathname]
+  )
 
   const placement: Placement = useMemo(
     () => (isMobile ? "footer" : "sidebar"),
@@ -22,23 +30,28 @@ export default function OddSmashPromo() {
   useEffect(() => {
     setHasMounted(true)
     try {
-      const stored = localStorage.getItem(DISMISS_KEY)
+      const stored = localStorage.getItem(dismissKey)
       setIsDismissed(stored === "1")
     } catch {
       // Intentionally ignore: localStorage may be unavailable or blocked
     }
-  }, [])
+  }, [dismissKey])
 
   const handleDismiss = () => {
     setIsDismissed(true)
     try {
-      localStorage.setItem(DISMISS_KEY, "1")
+      localStorage.setItem(dismissKey, "1")
     } catch {
       // Intentionally ignore: non-critical if persisting dismissal fails
     }
   }
 
-  if (!hasMounted || isDismissed) return null
+  if (
+    pathname?.startsWith("/join") ||
+    !hasMounted ||
+    isDismissed
+  )
+    return null
 
   return (
     <div
