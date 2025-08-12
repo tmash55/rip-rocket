@@ -358,7 +358,7 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
                   className="data-[state=checked]:bg-primary"
                 />
                 <Label htmlFor="rank-type" className="text-sm font-semibold cursor-pointer select-none">
-                  {showPositionRank ? 'Position Rank' : 'Overall Rank'}
+                  {showPositionRank ? 'Position Rank' : 'ADP'}
                 </Label>
               </div>
               
@@ -420,7 +420,7 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
                   >
                     <TrendingUp className="w-5 h-5" style={{ color: data.player.team_color }} />
                   </div>
-                  {showPositionRank ? 'Position' : 'Overall'} Rank Trends
+                  {showPositionRank ? 'Position Rank Trends' : 'ADP Trends'}
                 </h3>
                 <div className="flex items-center gap-2">
                   <Badge 
@@ -470,7 +470,7 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
                       }}
                       formatter={(value: any, name: string) => [
                         showPositionRank ? `${data.player.position}${value}` : `#${value}`,
-                        `${name} ${showPositionRank ? 'Position' : 'Overall'} Rank`
+                        `${name} ${showPositionRank ? 'Position Rank' : 'ADP'}`
                       ]}
                       labelFormatter={(label) => `${label}`}
                     />
