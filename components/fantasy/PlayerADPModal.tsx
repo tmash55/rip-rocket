@@ -508,47 +508,40 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
                 
                 const latestRank = showPositionRank ? latestData?.position_rank : latestData?.overall_rank;
                 const firstRank = showPositionRank ? firstData?.position_rank : firstData?.overall_rank;
-                const trend = latestRank && firstRank ? latestRank - firstRank : 0;
+                const trendRaw =
+                  latestRank != null && firstRank != null ? latestRank - firstRank : 0;
+                const trendAbsRounded = Number(Math.abs(trendRaw).toFixed(2));
                 
                 return (
                   <div 
                     key={platform}
-                    className={`relative p-5 rounded-2xl border-2 transition-all duration-300 backdrop-blur-sm ${
-                      visiblePlatforms[platform] 
-                        ? 'bg-card/80 border-border shadow-lg hover:shadow-xl transform hover:scale-[1.02] hover:-translate-y-1' 
-                        : 'bg-muted/20 border-muted opacity-50 hover:opacity-75'
+                    className={`relative p-4 md:p-5 rounded-xl border transition-colors duration-200 ${
+                      visiblePlatforms[platform]
+                        ? 'bg-card/70 border-border/60 shadow-sm hover:shadow-md'
+                        : 'bg-muted/30 border-border/40 opacity-75'
                     }`}
                     style={{
-                      borderColor: visiblePlatforms[platform] ? PLATFORM_COLORS[platform] : undefined,
-                      background: visiblePlatforms[platform] 
-                        ? `linear-gradient(135deg, ${PLATFORM_COLORS[platform]}05 0%, transparent 100%)`
+                      background: visiblePlatforms[platform]
+                        ? `linear-gradient(135deg, ${PLATFORM_COLORS[platform]}0A 0%, transparent 100%)`
                         : undefined
                     }}
                   >
-                    {/* Enhanced platform accent with glow */}
-                    <div 
-                      className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl shadow-sm"
-                      style={{ 
-                        backgroundColor: PLATFORM_COLORS[platform] || '#6b7280',
-                        boxShadow: `0 0 8px ${PLATFORM_COLORS[platform]}40`
-                      }}
-                    />
                     
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div 
-                          className="w-5 h-5 rounded-full shadow-md border border-white/20"
+                          className="w-2.5 h-2.5 rounded-full"
                           style={{ backgroundColor: PLATFORM_COLORS[platform] || '#6b7280' }}
                         />
-                        <span className="font-bold text-sm">{platform}</span>
+                        <span className="font-semibold text-sm">{platform}</span>
                       </div>
-                      {trend !== 0 && (
+                      {trendRaw !== 0 && (
                         <div className={`flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm border ${
-                          trend > 0 
+                          trendRaw > 0 
                             ? 'text-red-700 bg-red-50 border-red-200 dark:text-red-400 dark:bg-red-950 dark:border-red-800' 
                             : 'text-green-700 bg-green-50 border-green-200 dark:text-green-400 dark:bg-green-950 dark:border-green-800'
                         }`}>
-                          {trend > 0 ? '↓' : '↑'} {Math.abs(trend)}
+                          {trendRaw > 0 ? '↓' : '↑'} {trendAbsRounded}
                         </div>
                       )}
                     </div>
