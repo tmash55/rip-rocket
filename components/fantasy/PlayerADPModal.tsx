@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { TrendingUp } from 'lucide-react';
 import { PLATFORM_COLORS } from '@/lib/platform-config';
 
 // Utility functions for better color contrast and modern styling
@@ -484,8 +484,8 @@ export default function PlayerADPModal({ playerId, isOpen, onClose }: PlayerADPM
                           dataKey={platform}
                           stroke={PLATFORM_COLORS[platform] || '#6b7280'}
                           strokeWidth={3}
-                          dot={{ r: 5, strokeWidth: 2, fill: 'white' }}
-                          activeDot={{ r: 7, strokeWidth: 2 }}
+                          dot={false}
+                          activeDot={false}
                           connectNulls={false}
                           name={platform}
                         />
