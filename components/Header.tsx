@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { BarChart3, TrendingUp } from 'lucide-react';
+import { BarChart3, TrendingUp, User, LogOut, LogIn } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
@@ -15,8 +15,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import logo from "@/app/icon.png";
 import config from "@/config";
+import { useAuth } from "@/components/providers/auth-provider";
 
 const adpLinks: {
   href: string;
@@ -43,16 +51,25 @@ const adpLinks: {
 
 const themeToggle: JSX.Element = <ThemeToggle />;
 
-// A combined header with logo, ADP navigation, and theme toggle
+// A combined header with logo, ADP navigation, auth, and theme toggle
 const Header = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { user, loading, signOut } = useAuth();
 
   // setIsOpen(false) when the route changes (i.e: when the user clicks on a link on mobile)
   useEffect(() => {
     setIsOpen(false);
   }, [searchParams]);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
+  };
 
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50 backdrop-blur-sm">
@@ -113,8 +130,55 @@ const Header = () => {
           </TooltipProvider>
         </div>
 
-        {/* Theme toggle - Always visible */}
-        <div className="flex justify-end flex-1">
+        {/* Auth and Theme toggle */}
+        <div className="flex justify-end flex-1 items-center gap-2">
+          {!loading && (
+            <>
+              {user ? (
+                // User is logged in - show user menu
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-8 sm:h-9 px-2 sm:px-3 flex items-center gap-1.5"
+                    >
+                      <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <span className="font-medium text-xs sm:text-sm hidden xs:block">
+                        {user.email?.split('@')[0] || 'Account'}
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link href="/integrations" className="flex items-center gap-2">
+                        <BarChart3 className="w-4 h-4" />
+                        Integrations
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={handleSignOut}
+                      className="flex items-center gap-2 text-red-600 dark:text-red-400"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                // User is not logged in - show sign in button
+                <Button asChild variant="ghost" size="sm" className="h-8 sm:h-9 px-2 sm:px-3">
+                  <Link href="/sign-in" className="flex items-center gap-1.5">
+                    <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span className="font-medium text-xs sm:text-sm hidden xs:block">
+                      Sign In
+                    </span>
+                  </Link>
+                </Button>
+              )}
+            </>
+          )}
           <ThemeToggle />
         </div>
       </nav>
