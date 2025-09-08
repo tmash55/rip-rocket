@@ -28,20 +28,23 @@ export async function GET(req: NextRequest) {
 	// For new OAuth security model, use actual redirect URI
 	const redirectUri = `${url.origin}/api/integrations/ebay/callback`;
 	
-	// Updated scopes for new OAuth (simplified)
-	const scope = encodeURIComponent(
-		"https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/sell.inventory https://api.ebay.com/oauth/api_scope/sell.account"
-	);
-
-	console.log("[eBay OAuth] Initiating OAuth flow:", {
-		clientId: clientId.substring(0, 10) + "...",
-		redirectUri,
-		userId: userData.user.id
-	});
+	// Updated scopes for new OAuth (simplified) - use single scope for testing
+	const scope = encodeURIComponent("https://api.ebay.com/oauth/api_scope");
 
 	const redirect = `${EBAY_SANDBOX_AUTH_URL}?client_id=${clientId}&redirect_uri=${encodeURIComponent(
 		redirectUri
 	)}&response_type=code&scope=${scope}&state=${state}`;
+
+	console.log("[eBay OAuth] Initiating OAuth flow:", {
+		clientId: clientId.substring(0, 10) + "...",
+		redirectUri,
+		userId: userData.user.id,
+		scope: scope,
+		state: state,
+		fullRedirectUrl: redirect
+	});
+
+	console.log("[eBay OAuth] Full redirect URL:", redirect);
 
 	return NextResponse.redirect(redirect);
 }
