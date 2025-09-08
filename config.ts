@@ -2,12 +2,12 @@ import { ConfigProps } from "./types/config";
 
 const config = {
   // REQUIRED
-  appName: "Fantasy Nexus",
+  appName: "Rip Rocket",
   // REQUIRED: a short description of your app for SEO tags (can be overwritten)
   appDescription:
     "Fantasy Football ADP tool - Compare average draft positions across ESPN, Yahoo, Sleeper, and more. Find value picks and dominate your fantasy football draft.",
   // REQUIRED (no https://, not trialing slash at the end, just the naked domain)
-  domainName: "fantasynexus.io",
+  domainName: "riprocket.io",
   crisp: {
     // Crisp website ID. IF YOU DON'T USE CRISP: just remove this => Then add a support email in this config file (resend.supportEmail) otherwise customer support won't work.
     id: "",

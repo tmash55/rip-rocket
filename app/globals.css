@@ -61,6 +61,7 @@ progress::-webkit-progress-value {
   
   .btn-gradient {
     @apply !bg-gradient !bg-[length:300%_300%] hover:saturate-[1.2] shadow duration-100 !border-0 !border-transparent !bg-transparent animate-shimmer disabled:!bg-none disabled:!bg-gray-500/30 !text-white;
+    background-image: var(--plume-gradient) !important;
   }
   
   /* Custom background classes to replace DaisyUI bg-base-* classes */
@@ -120,26 +121,44 @@ progress::-webkit-progress-value {
     @apply bg-background border border-border text-foreground rounded-lg p-3 focus:ring-2 focus:ring-ring focus:border-transparent;
   }
   :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
-    --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
+    /* Light theme (Daylight companion) */
+    --background: 219 100% 97%; /* #F7FAFF */
+    --foreground: 222 47% 12%; /* #0F172A */
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 222 47% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
-    --primary: 24.6 95% 53.1%;
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 60 4.8% 95.9%;
-    --secondary-foreground: 24 9.8% 10%;
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --ring: 24.6 95% 53.1%;
+    --popover-foreground: 222 47% 12%;
+    --primary: 16 80% 51%; /* #E6521C */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 100%; /* Surface */
+    --secondary-foreground: 222 47% 12%;
+    --muted: 221 55% 93%; /* Border tint */
+    --muted-foreground: 220 21% 45%; /* #5B6B8C */
+    --accent: 219 100% 97%;
+    --accent-foreground: 222 47% 12%;
+    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 221 55% 93%; /* #E4EAF7 */
+    --input: 221 55% 93%;
+    --ring: 16 100% 56%; /* #FF5A1F focus ring */
     --radius: 0.5rem;
+
+    /* Semantic colors */
+    --success: 142 71% 45%; /* #22C55E */
+    --warning: 38 92% 52%; /* #F59E0B */
+    --info: 198 93% 59%; /* #38BDF8 */
+
+    /* Brand accents */
+    --accent-1: 339 79% 56%; /* #E73673 (light accent 1) */
+    --accent-2: 248 92% 63%; /* #6A54F8 (light accent 2) */
+
+    /* Rocket plume gradient */
+    --plume-gradient: linear-gradient(135deg,#FF5A1F 0%,#FF3D81 45%,#7C5CFF 100%);
+
+    /* Table zebra overlays */
+    --zebra-overlay: 0 0% 0% / 0.02; /* rgba(0,0,0,0.02) */
+
+    /* Charts (left as-is or tune later) */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -148,25 +167,43 @@ progress::-webkit-progress-value {
   }
  
   .dark {
-    --background: 0 0% 9%;
-    --foreground: 60 9.1% 97.8%;
-    --card: 0 0% 9%;
-    --card-foreground: 60 9.1% 97.8%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 60 9.1% 97.8%;
-    --primary: 20.5 90.2% 48.2%;
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
-    --destructive: 0 72.2% 50.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
-    --ring: 20.5 90.2% 48.2%;
+    /* Dark theme (Rocket Noir) */
+    --background: 220 49% 8%; /* #0B1220 */
+    --foreground: 223 100% 95%; /* #E6EDFF */
+    --card: 221 46% 12%; /* #111A2E */
+    --card-foreground: 223 100% 95%;
+    --popover: 221 46% 12%;
+    --popover-foreground: 223 100% 95%;
+    --primary: 16 100% 56%; /* #FF5A1F */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 221 46% 12%; /* Surface */
+    --secondary-foreground: 223 100% 95%;
+    --muted: 220 40% 19%; /* Sunken */
+    --muted-foreground: 223 38% 75%; /* #A6B4D7 */
+    --accent: 252 100% 68%; /* Ion Violet */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 40% 19%; /* #1C2942 */
+    --input: 220 40% 19%;
+    --ring: 16 100% 56%; /* Focus ring color */
+
+    /* Semantic colors */
+    --success: 142 71% 45%;
+    --warning: 38 92% 52%;
+    --info: 198 93% 59%;
+
+    /* Brand accents */
+    --accent-1: 339 100% 62%; /* #FF3D81 */
+    --accent-2: 252 100% 68%; /* #7C5CFF */
+
+    /* Rocket plume gradient */
+    --plume-gradient: linear-gradient(135deg,#FF5A1F 0%,#FF3D81 45%,#7C5CFF 100%);
+
+    /* Table zebra overlays */
+    --zebra-overlay: 0 0% 100% / 0.02; /* rgba(255,255,255,0.02) */
+
+    /* Charts (left as-is or tune later) */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -184,5 +221,24 @@ progress::-webkit-progress-value {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Global focus ring with soft glow for accessibility */
+:where(button,
+  [role="button"],
+  a[href],
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--ring)) , 0 0 0 6px rgba(255,90,31,0.2);
+}
+
+/* Utility: apply rocket plume gradient as background-image */
+@layer utilities {
+  .bg-plume {
+    background-image: var(--plume-gradient);
   }
 }

@@ -14,6 +14,29 @@ export async function GET(req: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(requestUrl.origin + config.auth.callbackUrl);
+  // Check for redirect URL in the search params
+  const redirectTo = requestUrl.searchParams.get("redirectTo");
+  
+  // Get pending user data from session storage (if any)
+  const pendingUserData = typeof window !== 'undefined' 
+    ? sessionStorage.getItem('pendingUserData')
+    : null;
+
+  let redirectUrl = requestUrl.origin;
+
+  if (pendingUserData) {
+    // User just signed up, redirect to onboarding
+    redirectUrl += '/onboarding';
+    if (redirectTo) {
+      redirectUrl += `?redirectTo=${encodeURIComponent(redirectTo)}`;
+    }
+  } else if (redirectTo) {
+    // User signed in normally, redirect to requested page
+    redirectUrl += redirectTo;
+  } else {
+    // Default redirect
+    redirectUrl += '/dashboard';
+  }
+
+  return NextResponse.redirect(redirectUrl);
 }
