@@ -55,7 +55,7 @@ export class CardPairingService {
       }
 
       console.log(`[Pairing] Processing ${uploads.length} uploads for batch ${batchId}`)
-      console.log(`[Pairing] Filenames:`, uploads.map(u => u.filename))
+      console.log(`[Pairing] Filenames:`, uploads.map((u: Upload) => u.filename))
 
       const result: PairingResult = {
         success: true,
@@ -155,7 +155,7 @@ export class CardPairingService {
         const match = filename.match(pattern.regex)
         if (!match) continue
 
-        const [, basename, suffix, extension] = match
+        const [, basename, , extension] = match
         const possibleMatches = pattern.matcher(basename).map(name => `${name}${extension}`)
 
         // Find matching upload
@@ -238,7 +238,7 @@ export class CardPairingService {
       const numberMatch = name.match(/(\d+)(?!.*\d)/) // last number in the name
       const number = numberMatch ? parseInt(numberMatch[1]) : null
       const withoutExt = name.replace(/\.[^.]+$/, '')
-      const prefix = withoutExt.replace(/[\s_\-]*\d+$/, '') // drop trailing digits and separators
+      const prefix = withoutExt.replace(/[\s_-]*\d+$/, '') // drop trailing digits and separators
       console.log(`[Pairing] Sequential: ${upload.filename} -> number: ${number}, prefix: ${prefix}`)
       if (number === null) continue
       const list = groups.get(prefix) || []
@@ -247,7 +247,7 @@ export class CardPairingService {
     }
 
     let totalCountWithNumbers = 0
-    for (const [prefix, list] of groups) {
+    for (const [prefix, list] of Array.from(groups)) {
       list.sort((a, b) => a.number - b.number)
       totalCountWithNumbers += list.length
       console.log(`[Pairing] Sequential: Group '${prefix}' sorted:`, list.map(i => `${i.upload.filename}(${i.number})`).join(', '))
@@ -401,8 +401,8 @@ export class CardPairingService {
     const uploads = uploadsResult.data || []
     const pairs = pairsResult.data || []
     
-    const orphanedUploads = uploads.filter(upload => upload.status === 'orphaned')
-    const pairedUploads = uploads.filter(upload => upload.status === 'paired')
+    const orphanedUploads = uploads.filter((upload: Upload) => upload.status === 'orphaned')
+    const pairedUploads = uploads.filter((upload: Upload) => upload.status === 'paired')
 
     return {
       total_uploads: uploads.length,

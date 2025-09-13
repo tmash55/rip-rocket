@@ -92,7 +92,7 @@ export default function UploadSuccess({ batchId, batchName, totalFiles }: Upload
           </div>
           <CardTitle className="text-2xl">Upload Successful!</CardTitle>
           <p className="text-muted-foreground">
-            {totalFiles} images uploaded to batch "{batchName}"
+            {totalFiles} images uploaded to batch &quot;{batchName}&quot;
           </p>
         </CardHeader>
       </Card>

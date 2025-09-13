@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@/libs/supabase/server'
+import { createServiceClient } from '@/libs/supabase/server'
 import { AIVision } from '@/lib/openai-vision'
 
 /**
@@ -13,7 +13,7 @@ export async function POST(
     const { batch_id } = params
     console.log(`[Model Test] Testing batch: ${batch_id}`)
 
-    const supabase = createServerClient()
+    const supabase = createServiceClient()
 
     // Get paired cards for this batch
     const { data: pairs, error: pairsError } = await supabase
@@ -99,7 +99,7 @@ async function testModel(model: string, pair: any) {
       duration,
       model,
       error: error instanceof Error ? error.message : 'Unknown error',
-      cost_estimate: null
+      cost_estimate: null as ReturnType<typeof estimateCost>
     }
   }
 }

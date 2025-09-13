@@ -55,7 +55,7 @@ export default function TestUploadPage() {
             <p>This page helps test the new workflow:</p>
             <ol className="list-decimal list-inside mt-2 space-y-1">
               <li>Review paired cards</li>
-              <li>Click "Start AI Analysis"</li>
+              <li>Click &quot;Start AI Analysis&quot;</li>
               <li>View results dashboard</li>
               <li>Edit extracted data</li>
             </ol>

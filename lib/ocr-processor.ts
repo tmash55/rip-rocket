@@ -281,7 +281,7 @@ export class OCRProcessor {
 
     const totalPairs = pairsResult.data?.length || 0
     const processedCards = cardsResult.data?.length || 0
-    const cardsNeedingReview = cardsResult.data?.filter(c => c.status === 'needs_review').length || 0
+    const cardsNeedingReview = cardsResult.data?.filter((c: { id: string; status: string }) => c.status === 'needs_review').length || 0
 
     return {
       total_pairs: totalPairs,

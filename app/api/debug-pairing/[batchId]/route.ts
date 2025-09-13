@@ -7,6 +7,81 @@ interface RouteParams {
   params: { batchId: string }
 }
 
+interface PatternTest {
+  pattern_name: string
+  regex: string
+  matched: boolean
+  extracted_parts: string[] | null
+  potential_matches: Array<{
+    expected_filename: string
+    found_partner: {
+      id: string
+      filename: string
+    } | null
+  }>
+}
+
+interface FilenameAnalysis {
+  filename: string
+  patterns_tested: PatternTest[]
+}
+
+interface SequentialPair {
+  pair_index: number
+  first_file: {
+    filename: string
+    number: number
+    id: string
+  }
+  second_file: {
+    filename: string
+    number: number
+    id: string
+  }
+  number_difference: number
+  is_sequential: boolean
+  would_pair: boolean
+}
+
+interface SequentialAnalysis {
+  total_uploads: number
+  uploads_with_numbers: number
+  sorted_by_number: Array<{
+    filename: string
+    extracted_number: string
+    parsed_number: number
+    upload_id: string
+  }>
+  potential_sequential_pairs: SequentialPair[]
+}
+
+interface PairingRecommendation {
+  type: 'filename_pattern' | 'sequential_numbers'
+  method: string
+  confidence: number
+  front_file: string
+  back_file: string
+  front_id: string
+  back_id: string
+  number_difference?: number
+}
+
+interface DebugInfo {
+  batch_info: {
+    id: string
+    status: string
+    total_files: number
+  }
+  uploads: Array<{
+    id: string
+    filename: string
+    status: string
+  }>
+  filename_analysis: FilenameAnalysis[]
+  sequential_analysis: SequentialAnalysis
+  pairing_recommendations: PairingRecommendation[]
+}
+
 /**
  * GET /api/debug-pairing/[batchId]
  * Debug the pairing algorithm step-by-step
@@ -50,7 +125,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
     console.log(`[Debug] Processing ${uploads.length} uploads for batch ${batchId}`)
 
-    const debugInfo = {
+    const debugInfo: DebugInfo = {
       batch_info: {
         id: batchId,
         status: batch.status,
@@ -62,7 +137,12 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
         status: upload.status
       })),
       filename_analysis: [],
-      sequential_analysis: [],
+      sequential_analysis: {
+        total_uploads: 0,
+        uploads_with_numbers: 0,
+        sorted_by_number: [],
+        potential_sequential_pairs: []
+      },
       pairing_recommendations: []
     }
 
@@ -94,14 +174,14 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
     for (const upload of uploads) {
       const filename = upload.filename.toLowerCase()
-      const analysis = {
+      const analysis: FilenameAnalysis = {
         filename: upload.filename,
         patterns_tested: []
       }
 
       for (const pattern of filenamePatterns) {
         const match = filename.match(pattern.regex)
-        const patternTest = {
+        const patternTest: PatternTest = {
           pattern_name: pattern.name,
           regex: pattern.regex.toString(),
           matched: !!match,
@@ -110,7 +190,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
         }
 
         if (match) {
-          const [, basename, suffix, extension] = match
+          const [, basename, , extension] = match
           const possibleMatches = pattern.matcher(basename).map(name => `${name}${extension}`)
           
           // Check if any of these potential matches exist
@@ -163,8 +243,8 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       uploads_with_numbers: uploadsWithNumbers.length,
       sorted_by_number: uploadsWithNumbers.map(item => ({
         filename: item.upload.filename,
-        extracted_number: item.extracted_number,
-        parsed_number: item.number,
+        extracted_number: item.extracted_number!,
+        parsed_number: item.number!,
         upload_id: item.upload.id
       })),
       potential_sequential_pairs: []
@@ -191,12 +271,12 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
         pair_index: debugInfo.sequential_analysis.potential_sequential_pairs.length,
         first_file: {
           filename: current.upload.filename,
-          number: current.number,
+          number: current.number!,
           id: current.upload.id
         },
         second_file: {
           filename: next.upload.filename,
-          number: next.number,
+          number: next.number!,
           id: next.upload.id
         },
         number_difference: difference,
@@ -227,7 +307,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
               confidence: 0.95,
               front_file: analysis.filename,
               back_file: potentialMatch.found_partner.filename,
-              front_id: uploads.find(u => u.filename === analysis.filename)?.id,
+              front_id: uploads.find(u => u.filename === analysis.filename)?.id!,
               back_id: potentialMatch.found_partner.id
             })
           }
@@ -256,15 +336,15 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       debug_info: debugInfo,
       summary: {
         total_uploads: uploads.length,
-        filename_patterns_found: debugInfo.filename_analysis.filter(a => 
-          a.patterns_tested.some(p => p.potential_matches.some(m => m.found_partner))
+        filename_patterns_found: debugInfo.filename_analysis.filter((a: FilenameAnalysis) => 
+          a.patterns_tested.some((p: PatternTest) => p.potential_matches.some((m) => m.found_partner))
         ).length,
-        sequential_pairs_found: debugInfo.sequential_analysis.potential_sequential_pairs.filter(p => p.would_pair).length,
+        sequential_pairs_found: debugInfo.sequential_analysis.potential_sequential_pairs.filter((p: SequentialPair) => p.would_pair).length,
         total_recommendations: debugInfo.pairing_recommendations.length
       }
     }, { status: 200 })
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('[Debug] Error:', error)
     return NextResponse.json({ 
       error: "Debug failed",

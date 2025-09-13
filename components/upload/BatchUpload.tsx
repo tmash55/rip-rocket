@@ -1,5 +1,5 @@
 "use client"
-
+import React from 'react'
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Upload, X, FileImage, AlertCircle, CheckCircle } from 'lucide-react'

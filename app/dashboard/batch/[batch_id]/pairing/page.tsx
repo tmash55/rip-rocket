@@ -35,7 +35,7 @@ export default async function PairingPage({ params }: PageProps) {
           <CardContent className="flex items-center justify-center h-48">
             <div className="text-center">
               <h2 className="text-xl font-semibold mb-2">Batch Not Found</h2>
-              <p className="text-muted-foreground mb-4">The batch you're looking for doesn't exist or you don't have access to it.</p>
+              <p className="text-muted-foreground mb-4">The batch you&apos;re looking for doesn&apos;t exist or you don&apos;t have access to it.</p>
               <Link href="/dashboard/upload">
                 <Button>
                   <ArrowLeft className="h-4 w-4 mr-2" />

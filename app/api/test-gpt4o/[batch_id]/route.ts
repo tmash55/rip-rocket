@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@/libs/supabase/server'
+import { createServiceClient } from '@/libs/supabase/server'
 import { OpenAIVisionOCR } from '@/lib/openai-vision'
 
 /**
@@ -13,7 +13,7 @@ export async function POST(
     const { batch_id } = params
     console.log(`[GPT-4o Test] Testing batch: ${batch_id}`)
 
-    const supabase = createServerClient()
+    const supabase = createServiceClient()
 
     // Get one paired card for this batch
     const { data: pairs, error: pairsError } = await supabase

@@ -227,7 +227,7 @@ export default function ReviewPairingPage() {
           {!canStartOCR && (
             <div className="text-center">
               <p className="text-muted-foreground">
-                No paired cards found. The pairing algorithm couldn't match front and back images.
+                No paired cards found. The pairing algorithm couldn&apos;t match front and back images.
               </p>
             </div>
           )}
@@ -306,7 +306,7 @@ export default function ReviewPairingPage() {
             <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No Card Pairs Found</h3>
             <p className="text-muted-foreground">
-              The pairing algorithm couldn't find any matching front/back pairs in this batch.
+              The pairing algorithm couldn&apos;t find any matching front/back pairs in this batch.
             </p>
           </CardContent>
         </Card>

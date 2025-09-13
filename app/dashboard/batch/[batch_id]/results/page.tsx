@@ -366,7 +366,7 @@ export default function ResultsDashboardPage() {
           <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
             <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
             <span className="text-sm text-blue-700 dark:text-blue-400">
-              AI analysis in progress... Cards will appear as they're completed
+              AI analysis in progress... Cards will appear as they&apos;re completed
             </span>
           </div>
         )}
