@@ -8,6 +8,8 @@ const nextConfig = {
       "pbs.twimg.com",
       "images.unsplash.com",
       "logos-world.net",
+      // Supabase storage for card images
+      "xpqjhmxdjpxecdplvygk.supabase.co",
     ],
   },
 };

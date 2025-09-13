@@ -5,7 +5,7 @@ const config = {
   appName: "Rip Rocket",
   // REQUIRED: a short description of your app for SEO tags (can be overwritten)
   appDescription:
-    "Fantasy Football ADP tool - Compare average draft positions across ESPN, Yahoo, Sleeper, and more. Find value picks and dominate your fantasy football draft.",
+    "Trading Card Pairing Tool",
   // REQUIRED (no https://, not trialing slash at the end, just the naked domain)
   domainName: "riprocket.io",
   crisp: {
